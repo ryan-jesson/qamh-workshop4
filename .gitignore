@@ -1,0 +1,10 @@
+# macOS
+.DS_Store
+.AppleDouble
+.LSOverride
+
+# iCloud placeholders
+*.icloud
+
+# Private workshop planning materials — not for public repo
+Context/

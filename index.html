@@ -1,0 +1,2261 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>The Human in the Loop — QAMH AI Training, Session 4</title>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=DM+Serif+Display:ital@0;1&family=Inter:wght@300;400;500;600;700&display=swap');
+
+  :root {
+    --cream:        #FAF7F2;
+    --warm:         #F0EBE3;
+    --navy:         #1C2B4A;
+    --navy-lift:    #2A3B5F;
+    --navy-border:  rgba(255,255,255,0.18);
+    --terracotta:   #C2622D;
+    --terracotta-soft: #FDF3EE;
+    --reveal-bg:    #FFF8F5;
+    --white:        #FFFFFF;
+    --ink:          #1C2B4A;
+    --muted-ink:    rgba(28,43,74,0.65);
+    --muted-white:  rgba(255,255,255,0.72);
+    --shadow:       0 2px 12px rgba(0,0,0,0.07);
+    --shadow-lift:  0 6px 24px rgba(0,0,0,0.10);
+  }
+
+  * { box-sizing: border-box; }
+
+  html { scroll-behavior: smooth; }
+
+  body {
+    margin: 0;
+    font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+    font-weight: 400;
+    background: var(--cream);
+    color: var(--ink);
+    line-height: 1.65;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+  }
+
+  /* ── Section frame ──────────────────────────────────────────── */
+  section {
+    min-height: 90vh;
+    padding: 6rem 2rem;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+  }
+  section > .container {
+    max-width: 900px;
+    width: 100%;
+    margin: 0 auto;
+  }
+
+  .bg-cream { background: var(--cream); color: var(--ink); }
+  .bg-warm  { background: var(--warm);  color: var(--ink); }
+  .bg-navy  { background: var(--navy);  color: var(--white); }
+
+  /* ── Type ───────────────────────────────────────────────────── */
+  h1, h2, h3, h4 {
+    font-family: 'DM Serif Display', Georgia, serif;
+    font-weight: 400;
+    line-height: 1.15;
+    margin: 0 0 1.25rem 0;
+    letter-spacing: -0.01em;
+  }
+
+  .section-label {
+    text-transform: uppercase;
+    letter-spacing: 0.22em;
+    font-size: 0.78rem;
+    color: var(--terracotta);
+    font-weight: 600;
+    margin-bottom: 1.5rem;
+    display: block;
+  }
+
+  .section-title {
+    font-size: clamp(2.4rem, 5vw, 3.8rem);
+    margin-bottom: 1.25rem;
+  }
+  .bg-navy .section-title { color: var(--white); }
+
+  .subtitle {
+    font-size: clamp(1.05rem, 1.6vw, 1.2rem);
+    color: var(--muted-white);
+    margin: 0 0 3rem 0;
+    max-width: 700px;
+    font-style: italic;
+  }
+  .bg-cream .subtitle, .bg-warm .subtitle { color: var(--muted-ink); }
+
+  p { margin: 0 0 1rem 0; }
+
+  .lede { font-size: 1.15rem; }
+
+  /* ── Title hero ─────────────────────────────────────────────── */
+  .hero { text-align: center; }
+  .hero .eyebrow {
+    text-transform: uppercase;
+    letter-spacing: 0.3em;
+    color: var(--terracotta);
+    font-size: 0.85rem;
+    font-weight: 600;
+    margin-bottom: 2.5rem;
+  }
+  .hero h1 {
+    font-size: clamp(3.2rem, 8vw, 6rem);
+    line-height: 1.05;
+    margin-bottom: 1rem;
+  }
+  .hero .hero-sub {
+    font-family: 'DM Serif Display', serif;
+    font-style: italic;
+    font-size: clamp(1.3rem, 2.4vw, 1.9rem);
+    color: var(--muted-white);
+    margin-bottom: 5rem;
+  }
+  .hero .credit {
+    text-transform: uppercase;
+    letter-spacing: 0.25em;
+    font-size: 0.78rem;
+    color: var(--muted-white);
+  }
+
+  /* ── Cards (generic) ────────────────────────────────────────── */
+  .card {
+    background: var(--white);
+    border-radius: 1.5rem;
+    padding: 2.5rem;
+    box-shadow: var(--shadow);
+    color: var(--ink);
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+  }
+
+  .card-navy {
+    background: var(--navy-lift);
+    border: 1px solid var(--navy-border);
+    border-radius: 1.25rem;
+    padding: 2rem;
+    color: var(--white);
+    display: flex;
+    flex-direction: column;
+    gap: 0.85rem;
+  }
+
+  /* ── Grids ──────────────────────────────────────────────────── */
+  .grid-3 { display: grid; grid-template-columns: repeat(3, 1fr); gap: 1.5rem; width: 100%; }
+  .grid-2 { display: grid; grid-template-columns: repeat(2, 1fr); gap: 1.5rem; width: 100%; }
+
+  /* ── Recap cards ────────────────────────────────────────────── */
+  .recap-card .num {
+    font-family: 'DM Serif Display', serif;
+    font-size: 2.2rem;
+    color: var(--terracotta);
+    line-height: 1;
+  }
+  .recap-card h3 {
+    font-size: 1.8rem;
+    margin: 0;
+    color: var(--white);
+  }
+  .recap-card .body { color: var(--muted-white); font-size: 0.98rem; }
+  .recap-card .pull {
+    border-top: 1px solid var(--navy-border);
+    padding-top: 1rem;
+    margin-top: 0.5rem;
+    color: var(--terracotta);
+    font-style: italic;
+    font-size: 0.95rem;
+    line-height: 1.55;
+  }
+
+  .after-cards {
+    margin-top: 4rem;
+    text-align: center;
+    font-family: 'DM Serif Display', serif;
+    font-style: italic;
+    font-size: clamp(1.4rem, 2.6vw, 2rem);
+    color: var(--white);
+    line-height: 1.35;
+    max-width: 780px;
+  }
+
+  /* ── Discussion prompt cards ────────────────────────────────── */
+  .prompt-card {
+    background: var(--white);
+    border-left: 4px solid var(--terracotta);
+    border-radius: 1rem;
+    padding: 2rem 2.25rem;
+    box-shadow: var(--shadow);
+    font-size: 1.2rem;
+    line-height: 1.55;
+    color: var(--ink);
+    display: flex;
+    gap: 1rem;
+    align-items: flex-start;
+  }
+  .prompt-card .icon { font-size: 1.4rem; flex-shrink: 0; }
+  .prompt-card em { font-style: italic; }
+
+  .stack > * + * { margin-top: 1.5rem; }
+
+  .rule {
+    width: 60px;
+    height: 1px;
+    background: var(--muted-ink);
+    opacity: 0.3;
+    margin: 3rem auto;
+    border: 0;
+  }
+  .bg-navy .rule { background: var(--muted-white); }
+
+  .small-note {
+    text-align: center;
+    font-style: italic;
+    color: var(--muted-ink);
+    font-size: 0.98rem;
+  }
+
+  /* ── Reveal section ─────────────────────────────────────────── */
+  .reveal-stack { text-align: center; }
+  .reveal-stack .line-a {
+    font-size: 1.2rem;
+    color: var(--muted-white);
+    max-width: 680px;
+    margin: 0 auto 2rem;
+  }
+  .reveal-stack .line-b {
+    font-family: 'DM Serif Display', serif;
+    font-style: italic;
+    font-size: clamp(1.4rem, 2.6vw, 1.9rem);
+    color: var(--white);
+    max-width: 740px;
+    margin: 0 auto 3rem;
+    line-height: 1.4;
+  }
+  .reveal-stack .line-c {
+    font-family: 'DM Serif Display', serif;
+    color: var(--terracotta);
+    font-size: clamp(1.6rem, 3vw, 2.4rem);
+    line-height: 1.3;
+    max-width: 820px;
+    margin: 0 auto;
+  }
+
+  .proof-card .head {
+    font-family: 'DM Serif Display', serif;
+    font-size: 1.3rem;
+    color: var(--white);
+  }
+  .proof-card .arrow { color: var(--terracotta); font-size: 0.95rem; }
+  .proof-card .sub {
+    color: var(--muted-white);
+    font-style: italic;
+    font-size: 0.95rem;
+  }
+
+  .closer {
+    text-align: center;
+    margin-top: 4rem;
+  }
+  .closer .a {
+    font-size: 1.25rem;
+    color: var(--white);
+    margin-bottom: 1.25rem;
+    max-width: 760px;
+    margin-left: auto;
+    margin-right: auto;
+  }
+  .closer .b {
+    font-family: 'DM Serif Display', serif;
+    font-style: italic;
+    color: var(--terracotta);
+    font-size: clamp(1.5rem, 2.6vw, 2rem);
+  }
+
+  /* ── Framework intro ────────────────────────────────────────── */
+  .pull-quote {
+    background: var(--white);
+    border-left: 6px solid var(--navy);
+    border-radius: 1rem;
+    padding: 2.5rem 3rem;
+    box-shadow: var(--shadow);
+    font-family: 'DM Serif Display', serif;
+    font-style: italic;
+    font-size: clamp(1.15rem, 1.8vw, 1.35rem);
+    line-height: 1.55;
+    color: var(--ink);
+    margin: 0 0 3rem 0;
+  }
+
+  .compare-list { list-style: none; padding: 0; margin: 0; }
+  .compare-list li {
+    padding: 0.75rem 0;
+    font-size: 1.02rem;
+    line-height: 1.55;
+    border-bottom: 1px solid rgba(28,43,74,0.08);
+  }
+  .compare-list li:last-child { border-bottom: 0; }
+  .compare-list .mark { font-weight: 600; margin-right: 0.6rem; }
+  .compare-list .x { color: #aa3a3a; }
+  .compare-list .v { color: #2f7a4d; }
+
+  .compare-head {
+    font-family: 'DM Serif Display', serif;
+    font-size: 1.2rem;
+    margin-bottom: 0.5rem;
+    color: var(--ink);
+  }
+
+  .frame-cta {
+    text-align: center;
+    margin-top: 3rem;
+  }
+  .frame-cta .a {
+    font-family: 'DM Serif Display', serif;
+    font-weight: 400;
+    font-size: clamp(1.4rem, 2.4vw, 1.8rem);
+    color: var(--navy);
+    margin-bottom: 0.75rem;
+  }
+  .frame-cta .b {
+    color: var(--muted-ink);
+    font-style: italic;
+  }
+
+  /* ── Cluster intros ─────────────────────────────────────────── */
+  .chips {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.75rem;
+    justify-content: center;
+    margin-top: 2rem;
+  }
+  .chip {
+    border: 1px solid rgba(255,255,255,0.45);
+    padding: 0.7rem 1.25rem;
+    border-radius: 999px;
+    font-size: 0.98rem;
+    color: var(--white);
+    background: transparent;
+    white-space: nowrap;
+  }
+  .chip.alt {
+    border-style: dashed;
+    color: var(--muted-white);
+  }
+  .chips-divider {
+    color: var(--muted-white);
+    text-transform: uppercase;
+    letter-spacing: 0.2em;
+    font-size: 0.75rem;
+    margin: 1.75rem 0 0.5rem 0;
+  }
+
+  /* ── Vignette card ──────────────────────────────────────────── */
+  .vignette {
+    background: var(--white);
+    border-radius: 1.5rem;
+    border-left: 4px solid var(--terracotta);
+    box-shadow: var(--shadow);
+    padding: 2.5rem 2.75rem;
+    width: 100%;
+    color: var(--ink);
+  }
+  .vignette .scenario-label {
+    text-transform: uppercase;
+    letter-spacing: 0.18em;
+    font-size: 0.78rem;
+    color: var(--terracotta);
+    font-weight: 700;
+    margin-bottom: 1.25rem;
+  }
+  .vignette .scenario {
+    font-size: 1.08rem;
+    line-height: 1.7;
+  }
+  .vignette blockquote {
+    background: var(--cream);
+    border-left: 3px solid rgba(28,43,74,0.18);
+    padding: 1rem 1.4rem;
+    margin: 1.25rem 0;
+    font-family: 'Georgia', 'DM Serif Display', serif;
+    font-style: italic;
+    color: var(--ink);
+    border-radius: 0 0.5rem 0.5rem 0;
+  }
+
+  .prompt-q {
+    font-family: 'DM Serif Display', serif;
+    font-size: clamp(1.6rem, 3vw, 2.3rem);
+    font-weight: 400;
+    color: var(--navy);
+    text-align: center;
+    line-height: 1.3;
+    margin: 3rem auto;
+    max-width: 760px;
+  }
+
+  .move-divider {
+    text-align: center;
+    text-transform: uppercase;
+    letter-spacing: 0.3em;
+    font-size: 0.78rem;
+    color: var(--terracotta);
+    font-weight: 700;
+    margin: 2rem 0 1.5rem 0;
+    position: relative;
+  }
+  .move-divider::before, .move-divider::after {
+    content: "";
+    display: inline-block;
+    vertical-align: middle;
+    width: 60px;
+    height: 1px;
+    background: rgba(194,98,45,0.4);
+    margin: 0 1rem;
+  }
+
+  .reveal {
+    background: var(--reveal-bg);
+    border-radius: 1rem;
+    padding: 2rem 2.25rem;
+    margin-top: 1rem;
+  }
+  .reveal h3 {
+    font-family: 'DM Serif Display', serif;
+    font-size: 1.5rem;
+    margin: 0 0 1rem 0;
+    color: var(--navy);
+  }
+  .reveal p { font-size: 1.02rem; line-height: 1.65; }
+  .reveal blockquote {
+    background: var(--white);
+    border-left: 3px solid var(--terracotta);
+    padding: 1rem 1.4rem;
+    margin: 1.25rem 0;
+    font-family: 'Georgia', serif;
+    font-style: italic;
+    border-radius: 0 0.5rem 0.5rem 0;
+  }
+  .reveal em.tag {
+    display: block;
+    margin-top: 1rem;
+    color: var(--terracotta);
+    font-style: italic;
+  }
+
+  /* ── Vignette helpers ──────────────────────────────────────── */
+  .live-note {
+    margin-top: 1.5rem;
+    padding: 1rem 1.25rem;
+    background: var(--navy);
+    color: var(--white);
+    border-radius: 0.75rem;
+    font-size: 0.95rem;
+  }
+  .live-note strong {
+    color: var(--terracotta);
+    text-transform: uppercase;
+    letter-spacing: 0.15em;
+    font-size: 0.75rem;
+    display: block;
+    margin-bottom: 0.35rem;
+  }
+
+  /* ── Image placeholder ─────────────────────────────────────── */
+  .img-placeholder {
+    background: var(--terracotta-soft);
+    border: 2px dashed var(--terracotta);
+    border-radius: 1rem;
+    height: 200px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: var(--terracotta);
+    font-style: italic;
+    text-align: center;
+    padding: 1.5rem;
+    margin: 2rem 0;
+    font-size: 0.95rem;
+  }
+
+  /* ── Live demo cards (8B) ──────────────────────────────────── */
+  .step-card .num {
+    font-family: 'DM Serif Display', serif;
+    color: var(--terracotta);
+    font-size: 1.05rem;
+    text-transform: uppercase;
+    letter-spacing: 0.12em;
+    font-weight: 400;
+  }
+  .step-card .head {
+    font-family: 'DM Serif Display', serif;
+    font-size: 1.2rem;
+    color: var(--white);
+  }
+  .step-card .sub { color: var(--muted-white); font-style: italic; font-size: 0.92rem; }
+
+  /* ── Frontier ───────────────────────────────────────────────── */
+  .frontier-card .icon { color: var(--terracotta); font-size: 1.2rem; }
+  .frontier-card h4 {
+    font-family: 'DM Serif Display', serif;
+    font-size: 1.4rem;
+    margin: 0;
+    color: var(--white);
+  }
+  .frontier-card p { color: var(--muted-white); font-style: italic; margin: 0; font-size: 0.98rem; }
+
+  .learn-card {
+    background: var(--white);
+    border-radius: 1.5rem;
+    padding: 2.5rem 3rem;
+    color: var(--ink);
+    box-shadow: var(--shadow-lift);
+    margin-top: 3rem;
+  }
+  .learn-card h3 {
+    font-family: 'DM Serif Display', serif;
+    font-size: 1.6rem;
+    margin: 0 0 1.5rem 0;
+    color: var(--navy);
+  }
+  .learn-card ol {
+    list-style: none;
+    counter-reset: lc;
+    padding: 0;
+    margin: 0 0 1.5rem 0;
+  }
+  .learn-card ol li {
+    counter-increment: lc;
+    padding: 0.6rem 0;
+    padding-left: 2.5rem;
+    position: relative;
+    line-height: 1.55;
+  }
+  .learn-card ol li::before {
+    content: counter(lc) ".";
+    position: absolute;
+    left: 0;
+    color: var(--terracotta);
+    font-family: 'DM Serif Display', serif;
+    font-size: 1.2rem;
+    font-weight: 400;
+  }
+  .learn-card .closer-line {
+    margin-top: 1.5rem;
+    font-style: italic;
+    color: var(--muted-ink);
+    font-size: 1.02rem;
+  }
+
+  /* ── Close ──────────────────────────────────────────────────── */
+  .close-stack { text-align: center; }
+  .close-stack .l1 {
+    font-size: 1.2rem;
+    color: var(--muted-white);
+    margin-bottom: 1.5rem;
+  }
+  .close-stack .l2 {
+    font-size: clamp(1.4rem, 2.4vw, 1.8rem);
+    color: var(--white);
+    margin-bottom: 1.5rem;
+    font-family: 'DM Serif Display', serif;
+    font-style: italic;
+  }
+  .close-stack .l3 {
+    font-size: clamp(1.7rem, 3.4vw, 2.6rem);
+    color: var(--terracotta);
+    font-family: 'DM Serif Display', serif;
+    line-height: 1.3;
+    max-width: 840px;
+    margin: 0 auto;
+  }
+
+  .challenge-card {
+    background: var(--white);
+    border-radius: 1.5rem;
+    padding: 3rem 3.5rem;
+    color: var(--ink);
+    box-shadow: var(--shadow-lift);
+    text-align: center;
+    margin-top: 4rem;
+  }
+  .challenge-card .label {
+    text-transform: uppercase;
+    letter-spacing: 0.22em;
+    font-size: 0.78rem;
+    color: var(--terracotta);
+    font-weight: 600;
+    margin-bottom: 1rem;
+  }
+  .challenge-card h3 {
+    font-family: 'DM Serif Display', serif;
+    font-size: clamp(1.6rem, 2.8vw, 2.1rem);
+    color: var(--navy);
+    margin: 0 0 1.25rem 0;
+  }
+  .challenge-card p {
+    font-size: 1.1rem;
+    line-height: 1.65;
+    color: var(--ink);
+    margin: 0;
+    max-width: 640px;
+    margin-left: auto;
+    margin-right: auto;
+  }
+
+  /* ── Reflection (final) ────────────────────────────────────── */
+  .end-credit {
+    margin-top: 4rem;
+    text-align: center;
+  }
+  .end-credit .creditline {
+    text-transform: uppercase;
+    letter-spacing: 0.25em;
+    font-size: 0.8rem;
+    color: var(--terracotta);
+    font-weight: 600;
+    margin-bottom: 1.25rem;
+  }
+  .end-credit .values {
+    font-family: 'DM Serif Display', serif;
+    font-style: italic;
+    color: var(--navy);
+    font-size: clamp(1.3rem, 2.2vw, 1.6rem);
+  }
+
+  /* ── Cluster section spacing ───────────────────────────────── */
+  .cluster-intro { text-align: center; }
+
+  /* ── Responsive ─────────────────────────────────────────────── */
+  @media (max-width: 768px) {
+    .grid-2, .grid-3 { grid-template-columns: 1fr; }
+    section { padding: 4rem 1.25rem; }
+    .vignette, .card, .pull-quote, .learn-card, .challenge-card { padding: 1.75rem; }
+    .pull-quote { padding: 1.75rem; }
+    .prompt-q { margin: 2rem auto; }
+    .hero h1 { font-size: 3rem; }
+    .hero .hero-sub { margin-bottom: 3rem; }
+    .move-divider::before, .move-divider::after { width: 30px; margin: 0 0.5rem; }
+  }
+
+  /* ── Interactive reveal button ─────────────────────────────── */
+  .reveal-btn {
+    display: block;
+    margin: 2rem auto;
+    background: transparent;
+    border: 2px solid var(--terracotta);
+    color: var(--terracotta);
+    font-family: 'Inter', sans-serif;
+    font-size: 0.82rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.28em;
+    padding: 0.75rem 2.5rem;
+    border-radius: 999px;
+    cursor: pointer;
+    transition: background 0.18s, color 0.18s;
+  }
+  .reveal-btn:hover {
+    background: var(--terracotta);
+    color: var(--white);
+  }
+
+  /* ── "Why?" follow-up prompt ───────────────────────────────── */
+  .prompt-why {
+    text-align: center;
+    color: var(--muted-ink);
+    font-style: italic;
+    font-size: 1rem;
+    margin: -1.5rem auto 2.5rem;
+    max-width: 600px;
+  }
+
+  /* ── Multi-step vignette ───────────────────────────────────── */
+  .multistep { width: 100%; }
+  .step-item {
+    border-top: 1px solid rgba(28,43,74,0.1);
+    padding: 2.5rem 0 1rem;
+  }
+  .step-item:first-child { border-top: 0; padding-top: 0; }
+  .step-badge {
+    display: inline-block;
+    background: var(--navy);
+    color: var(--white);
+    font-size: 0.78rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.2em;
+    padding: 0.35rem 1rem;
+    border-radius: 999px;
+    margin-bottom: 1.25rem;
+  }
+  .step-scenario {
+    font-size: 1.05rem;
+    line-height: 1.7;
+    margin-bottom: 0.5rem;
+  }
+  .final-reveal-card {
+    background: var(--navy);
+    border-radius: 1.5rem;
+    padding: 3rem;
+    text-align: center;
+    margin-top: 3rem;
+    color: var(--white);
+  }
+  .final-reveal-card h3 {
+    font-family: 'DM Serif Display', serif;
+    font-size: clamp(1.6rem, 2.8vw, 2.2rem);
+    color: var(--terracotta);
+    margin: 0 0 1rem 0;
+  }
+  .final-reveal-card p {
+    color: var(--muted-white);
+    font-style: italic;
+    margin: 0 0 2rem 0;
+    font-size: 1.05rem;
+  }
+  .app-link-btn {
+    display: inline-block;
+    background: var(--terracotta);
+    color: var(--white);
+    font-family: 'Inter', sans-serif;
+    font-size: 0.9rem;
+    font-weight: 600;
+    letter-spacing: 0.1em;
+    padding: 1rem 2.5rem;
+    border-radius: 999px;
+    text-decoration: none;
+    cursor: pointer;
+    border: none;
+    transition: opacity 0.18s;
+  }
+  .app-link-btn:hover { opacity: 0.85; }
+
+  /* ── Recap stack ──────────────────────────────────────────── */
+  .recap-stack { display: flex; flex-direction: column; gap: 2rem; margin-top: 2.5rem; width: 100%; }
+  .recap-block {
+    display: flex;
+    gap: 2rem;
+    align-items: flex-start;
+    background: var(--navy-lift);
+    border: 1px solid var(--navy-border);
+    border-radius: 1.25rem;
+    padding: 2rem 2.25rem;
+  }
+  .recap-num {
+    font-family: 'DM Serif Display', serif;
+    font-size: 2.8rem;
+    color: var(--terracotta);
+    line-height: 1;
+    flex-shrink: 0;
+    min-width: 3rem;
+  }
+  .recap-heading {
+    font-family: 'DM Serif Display', serif;
+    font-size: 1.6rem;
+    color: var(--white);
+    margin: 0 0 1rem 0;
+  }
+  .recap-bullets {
+    color: var(--muted-white);
+    font-size: 0.98rem;
+    line-height: 1.7;
+    margin: 0 0 1.25rem 0;
+    padding-left: 1.25rem;
+  }
+  .recap-bullets li { margin-bottom: 0.35rem; }
+  .recap-bullets strong { color: var(--white); font-weight: 600; }
+  .recap-quote {
+    border-radius: 0.6rem;
+    padding: 1rem 1.5rem;
+    background: var(--terracotta);
+    color: var(--cream);
+    font-family: 'DM Serif Display', Georgia, serif;
+    font-style: italic;
+    font-size: 1.08rem;
+    line-height: 1.55;
+    margin-top: 1rem;
+  }
+
+  /* ── Framework intro (revised) ─────────────────────────────── */
+  .callout-quote-card {
+    background: var(--navy);
+    color: var(--white);
+    border-radius: 1.25rem;
+    padding: 2rem 2.5rem;
+    max-width: 740px;
+    margin: 0 auto;
+    text-align: center;
+  }
+  .callout-attribution {
+    font-size: 0.82rem;
+    text-transform: uppercase;
+    letter-spacing: 0.2em;
+    color: var(--terracotta);
+    font-weight: 600;
+    margin-bottom: 0.75rem;
+  }
+  .callout-text {
+    font-family: 'DM Serif Display', serif;
+    font-style: italic;
+    font-size: clamp(1.3rem, 2.4vw, 1.8rem);
+    line-height: 1.4;
+    color: var(--white);
+  }
+  .framework-reveal {
+    background: var(--navy);
+    border-radius: 1.25rem;
+    padding: 2.5rem 3rem;
+    max-width: 780px;
+    margin: 0 auto;
+    text-align: center;
+  }
+  .framework-reveal-line {
+    color: var(--muted-white);
+    font-size: clamp(1.05rem, 1.7vw, 1.2rem);
+    line-height: 1.6;
+    margin-bottom: 1rem;
+  }
+  .framework-reveal-line.emphasised {
+    font-family: 'DM Serif Display', serif;
+    font-style: italic;
+    font-size: clamp(1.3rem, 2.2vw, 1.7rem);
+    color: var(--terracotta);
+    margin-bottom: 0;
+  }
+
+  /* ── Cluster summary cards ─────────────────────────────────── */
+  .summary-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 1.25rem;
+    margin-top: 2.5rem;
+    width: 100%;
+  }
+  .summary-card {
+    background: var(--navy-lift);
+    border: 1px solid var(--navy-border);
+    border-radius: 1rem;
+    padding: 1.5rem 1.75rem;
+  }
+  .summary-name {
+    font-family: 'DM Serif Display', serif;
+    font-size: 1.15rem;
+    color: var(--terracotta);
+    margin-bottom: 0.6rem;
+    line-height: 1.3;
+  }
+  .summary-desc {
+    color: var(--muted-white);
+    font-size: 0.93rem;
+    line-height: 1.6;
+  }
+
+  /* ── Skills resource list ──────────────────────────────────── */
+  .resource-list-embed { margin: 1.5rem 0 0; }
+  .resource-item {
+    display: grid;
+    grid-template-columns: 2rem 1fr;
+    gap: 0.75rem;
+    padding: 0.85rem 0;
+    border-bottom: 1px solid rgba(28,43,74,0.08);
+    align-items: start;
+  }
+  .resource-item:last-child { border-bottom: 0; }
+  .resource-rank {
+    font-family: 'DM Serif Display', serif;
+    font-size: 1.1rem;
+    color: var(--terracotta);
+    padding-top: 0.1rem;
+  }
+  .resource-title {
+    font-size: 0.97rem;
+    font-weight: 600;
+    color: var(--navy);
+    margin: 0 0 0.3rem;
+    line-height: 1.4;
+  }
+  .resource-title a {
+    color: var(--navy);
+    text-decoration: none;
+    border-bottom: 1px solid rgba(28,43,74,0.25);
+    transition: border-color 0.15s;
+  }
+  .resource-title a:hover { border-color: var(--terracotta); color: var(--terracotta); }
+  .resource-badges { display: flex; flex-wrap: wrap; gap: 0.4rem; margin: 0.3rem 0; }
+  .resource-badge {
+    font-size: 0.72rem;
+    font-weight: 600;
+    padding: 0.2rem 0.6rem;
+    border-radius: 999px;
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+  }
+  .badge-yt { background: rgba(194,98,45,0.12); color: var(--terracotta); }
+  .badge-docs { background: rgba(28,43,74,0.08); color: var(--navy); }
+  .badge-pdf { background: rgba(28,43,74,0.08); color: var(--navy); }
+  .badge-art { background: rgba(28,43,74,0.08); color: var(--navy); }
+  .badge-views { background: transparent; color: var(--muted-ink); font-weight: 400; font-style: italic; }
+  .resource-desc { font-size: 0.9rem; color: var(--muted-ink); line-height: 1.55; margin: 0.25rem 0 0; }
+  .resource-why { font-size: 0.85rem; color: var(--terracotta); font-style: italic; margin: 0.35rem 0 0; line-height: 1.5; }
+
+  /* ── YouTube transcript instructions ───────────────────────── */
+  .transcript-steps { list-style: none; padding: 0; margin: 1rem 0 0; counter-reset: ts; }
+  .transcript-steps li {
+    counter-increment: ts;
+    padding: 0.5rem 0 0.5rem 2.5rem;
+    position: relative;
+    font-size: 0.98rem;
+    line-height: 1.6;
+    border-bottom: 1px solid rgba(28,43,74,0.07);
+  }
+  .transcript-steps li:last-child { border-bottom: 0; }
+  .transcript-steps li::before {
+    content: counter(ts);
+    position: absolute;
+    left: 0;
+    top: 0.5rem;
+    background: var(--terracotta);
+    color: var(--white);
+    width: 1.5rem;
+    height: 1.5rem;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 0.78rem;
+    font-weight: 700;
+  }
+
+  /* ── File cards (Skills section) ───────────────────────────── */
+  .files-produced {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.75rem;
+    margin: 1.25rem 0;
+  }
+  .file-card {
+    background: var(--white);
+    border: 1px solid rgba(28,43,74,0.12);
+    border-radius: 0.75rem;
+    padding: 0.75rem 1.1rem;
+    display: flex;
+    align-items: center;
+    gap: 0.6rem;
+    font-size: 0.88rem;
+    color: var(--navy);
+    font-family: 'Inter', monospace;
+    font-weight: 500;
+    box-shadow: var(--shadow);
+  }
+  .file-card .file-icon { font-size: 1.1rem; }
+  .claude-response-block {
+    background: rgba(28,43,74,0.04);
+    border-left: 3px solid var(--navy);
+    border-radius: 0 0.5rem 0.5rem 0;
+    padding: 1rem 1.4rem;
+    margin: 1rem 0;
+    font-size: 0.95rem;
+    line-height: 1.6;
+    color: var(--ink);
+  }
+  .claude-response-block::before {
+    content: "Claude responded:";
+    display: block;
+    font-size: 0.72rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.15em;
+    color: var(--navy);
+    opacity: 0.5;
+    margin-bottom: 0.5rem;
+  }
+
+  /* ── Claude response bubble (inside vignette scenarios) ────── */
+  .claude-response {
+    background: rgba(28,43,74,0.06);
+    border-left: 3px solid var(--navy);
+    padding: 1rem 1.4rem;
+    margin: 1.25rem 0;
+    font-family: 'Georgia', serif;
+    font-style: italic;
+    color: var(--ink);
+    border-radius: 0 0.5rem 0.5rem 0;
+  }
+  .claude-response::before {
+    content: "Claude:";
+    display: block;
+    font-family: 'Inter', sans-serif;
+    font-style: normal;
+    font-size: 0.75rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.15em;
+    color: var(--navy);
+    margin-bottom: 0.5rem;
+    opacity: 0.6;
+  }
+
+  /* ── Responsive overrides for new components ───────────────── */
+  @media (max-width: 768px) {
+    .recap-block { flex-direction: column; gap: 1rem; }
+    .summary-grid { grid-template-columns: 1fr; }
+  }
+</style>
+</head>
+<body>
+
+<!-- ══════════ TITLE ══════════ -->
+<section class="bg-navy">
+  <div class="container hero">
+    <div class="eyebrow">AI Training · Session 4 of 4</div>
+    <h1>The Human in the Loop</h1>
+    <div class="hero-sub">What you bring to the conversation</div>
+    <div class="credit">TaiLORED IDEAS · Dr Ryan Jesson</div>
+  </div>
+</section>
+
+<!-- ══════════ SECTION 1 — Strategic Recap ══════════ -->
+<section class="bg-navy">
+  <div class="container">
+    <span class="section-label">Recap</span>
+    <h2 class="section-title">Three sessions. One idea building.</h2>
+
+    <div class="recap-stack">
+
+      <div class="recap-block">
+        <div class="recap-num">01</div>
+        <div class="recap-body">
+          <h3 class="recap-heading">The Why</h3>
+          <ul class="recap-bullets">
+            <li>What large language models actually are and how they work</li>
+            <li>Why scale matters — and why language is the key</li>
+            <li>The limitations: hallucinations, bias, the coin-flip problem</li>
+            <li>Beyond productivity: speed, accuracy, creativity — and the deeper opportunity</li>
+            <li>AI as a <strong>thinking partner</strong>, not a replacement — augmentation, not automation</li>
+            <li>The personal assistant framing: PhD-level reasoning across any domain, sole purpose is to help you</li>
+            <li>Mindset matters most. <strong>Experimentation is your role.</strong></li>
+          </ul>
+          <div class="recap-quote">"I can never tell you exactly how to use these tools — I don't know what your job looks like from the inside."</div>
+        </div>
+      </div>
+
+      <div class="recap-block">
+        <div class="recap-num">02</div>
+        <div class="recap-body">
+          <h3 class="recap-heading">The How</h3>
+          <ul class="recap-bullets">
+            <li>The three pillars: <strong>Context, Iteration, Collaboration</strong></li>
+            <li>Context: giving directions, not just requests — the France-to-Brisbane metaphor</li>
+            <li>Role assignment, using examples, asking the model to ask you questions</li>
+            <li>Iteration: Make It Better, model self-reflection, refining rather than restarting</li>
+            <li>Collaboration: thinking partner in the truest sense — brainstorming, breaking down complexity, staying unstuck</li>
+            <li>Custom instructions: making Claude permanently aware of who you are and how you work</li>
+          </ul>
+          <div class="recap-quote">"When all three pillars work together — what we're actually talking about is just conversation."</div>
+        </div>
+      </div>
+
+      <div class="recap-block">
+        <div class="recap-num">03</div>
+        <div class="recap-body">
+          <h3 class="recap-heading">The Experience</h3>
+          <ul class="recap-bullets">
+            <li>A full policy submission simulation — real research paper, fabricated consultation dataset</li>
+            <li>Building a document section by section: context, research, data analysis, recommendations</li>
+            <li>Claude producing a complete, beautifully formatted HTML report from one shot of raw data</li>
+            <li>The reveal: the website, the dataset, the scenario, the prompts — all built with Claude</li>
+            <li>Homework: experiment with the HTML output</li>
+          </ul>
+          <div class="recap-quote">"Everything you worked with — the website, the dataset, the scenario — I built with Claude. I can't code. I don't know anything about the Internet."</div>
+        </div>
+      </div>
+
+    </div>
+
+    <div class="after-cards">
+      And today — the part that was always underneath all of it.
+    </div>
+  </div>
+</section>
+
+<!-- ══════════ SECTION 2 — Opening Discussion ══════════ -->
+<section class="bg-cream">
+  <div class="container">
+    <span class="section-label">Discussion</span>
+    <h2 class="section-title">What have you been doing?</h2>
+
+    <div class="stack" style="margin-top:2.5rem;">
+      <div class="prompt-card">
+        <span class="icon">💬</span>
+        <span><em>Since Session 3 — what's something you tried with AI that surprised you?</em></span>
+      </div>
+      <div class="prompt-card">
+        <span class="icon">💬</span>
+        <span><em>Has anyone used these tools in a way they wouldn't have imagined a few months ago?</em></span>
+      </div>
+      <div class="prompt-card">
+        <span class="icon">💬</span>
+        <span><em>What's the most useful thing you've done recently — even if it felt small?</em></span>
+      </div>
+    </div>
+
+    <hr class="rule" />
+    <p class="small-note">Listen for moments that connect to what comes next.</p>
+  </div>
+</section>
+
+<!-- ══════════ SECTION 4 — The Framework ══════════ -->
+<section class="bg-warm">
+  <div class="container">
+    <span class="section-label">The Heart of This Session</span>
+    <h2 class="section-title">The thinking partner works both ways.</h2>
+
+    <p class="lede" style="max-width:760px; margin:0 auto 2.5rem; text-align:center;">
+      Across the first three sessions, we established that Claude is a thinking partner. We showed what that partnership can produce. And we showed some impressive things.
+    </p>
+
+    <div class="callout-quote-card">
+      <div class="callout-attribution">A participant asked, in Session 3:</div>
+      <div class="callout-text">"Doesn't this just take out all of the thinking work for the human?"</div>
+    </div>
+
+    <p class="lede" style="max-width:760px; margin:2.5rem auto; text-align:center;">
+      It's a fair question. When you watch a tool produce sophisticated output, the natural inference is that the tool is doing the sophisticated work — and your job is to be a skilled requester.
+    </p>
+
+    <p style="max-width:760px; margin:0 auto 3rem; text-align:center; font-family:'DM Serif Display',serif; font-style:italic; font-size:clamp(1.3rem,2.2vw,1.7rem); line-height:1.4; color:var(--navy);">
+      That's not wrong. But it's incomplete. And today is about the other half.
+    </p>
+
+    <div class="framework-reveal">
+      <div class="framework-reveal-line">The quality of your AI conversations isn't primarily determined by what you ask for.</div>
+      <div class="framework-reveal-line emphasised">It's determined by the quality of thinking you bring to the small moments.</div>
+    </div>
+
+    <p style="max-width:720px; margin:2.5rem auto 1rem; text-align:center; color:var(--muted-ink); font-size:1.05rem; line-height:1.7;">
+      This is also the skill that ages well. AI capabilities keep evolving. Features change. Things have already changed since we last met. I can't teach to every tool or every update — it would be impossible, and it would be beside the point.
+    </p>
+
+    <p style="max-width:720px; margin:0 auto 3rem; text-align:center; font-weight:600; font-size:1.08rem; color:var(--navy);">
+      What I <em>can</em> teach is the quality of judgment that transfers to every tool, every update, every version of this technology that hasn't been built yet.
+    </p>
+
+    <div style="text-align:center; margin-bottom:2rem;">
+      <span class="section-label" style="font-size:0.9rem;">The Durable Skill</span>
+    </div>
+
+    <div class="grid-2" style="margin-bottom:3rem;">
+      <div class="card">
+        <div class="compare-head">What this is <em>not</em></div>
+        <ul class="compare-list">
+          <li><span class="mark x">✗</span> A list of better prompts to memorise</li>
+          <li><span class="mark x">✗</span> Techniques that go stale when the tools change</li>
+          <li><span class="mark x">✗</span> Something that requires technical background</li>
+          <li><span class="mark x">✗</span> Teaching you how to use AI in your specific context</li>
+        </ul>
+      </div>
+      <div class="card">
+        <div class="compare-head">What this <em>is</em></div>
+        <ul class="compare-list">
+          <li><span class="mark v">✓</span> A quality of attention that notices when a better move is available</li>
+          <li><span class="mark v">✓</span> A skill that compounds — and doesn't expire</li>
+          <li><span class="mark v">✓</span> The thing that was always driving the best conversations</li>
+          <li><span class="mark v">✓</span> The process for learning anything new that emerges</li>
+        </ul>
+      </div>
+    </div>
+
+    <div class="frame-cta">
+      <div class="a">Throughout this session, I'm going to pose scenarios.</div>
+      <div class="b">At each one — before I show you anything — I want to know what <em>you</em> would do. That's not incidental. That thinking moment <em>is</em> the lesson.</div>
+    </div>
+  </div>
+</section>
+
+<!-- ══════════ SECTION 5 — Cluster 1 intro ══════════ -->
+<section class="bg-navy">
+  <div class="container cluster-intro">
+    <span class="section-label">Cluster 1</span>
+    <h2 class="section-title">Setting the right scene</h2>
+    <p class="subtitle">The moves that happen before — and around — the conversation.</p>
+  </div>
+</section>
+
+<!-- ══════════ VIGNETTE 1A — Scene-Setting ══════════ -->
+<section class="bg-cream">
+  <div class="container">
+    <span class="section-label">Vignette · Starting Cold</span>
+
+    <div class="vignette">
+      <div class="scenario-label">Scenario</div>
+      <div class="scenario">
+        <p>Linda works in QAMH's Policy &amp; Impact team. This morning she has three related tasks to get through: update a funding submission due Friday, draft a briefing note for her manager based on a sector report that landed yesterday, and pull together three dot points summarising QAMH's position on a consultation that just opened.</p>
+        <p>She has three documents open on her desktop: the draft submission, the sector report, and QAMH's existing position paper. She opens Claude, pastes in the draft submission, and types:</p>
+        <blockquote>"Can you help me update this funding submission?"</blockquote>
+        <p>Claude starts making suggestions. They're reasonable. But when Linda switches to the briefing note, she has to re-explain the context. Then again for the consultation dot points. By the end of the session she feels like she spent half her time managing Claude rather than working with it.</p>
+      </div>
+
+      <p class="prompt-q">What would you do differently before sharing any of those documents?</p>
+      <p class="prompt-why">Which pillar of good prompting does this connect to — and why does it matter when you have multiple tasks?</p>
+
+      <button class="reveal-btn">↓ The Move</button>
+
+      <div class="reveal" style="display:none">
+        <h3>The Scene-Setting Move</h3>
+        <p>Before sharing a single document, take thirty seconds to lay out the shape of the whole session — and explicitly ask the model to hold before actioning anything.</p>
+        <blockquote>"I'm working on three things today that are all connected. I'll be sharing several documents with you shortly — a draft funding submission, a sector report, and a position paper. For now, I just want you to read them and take them in. Don't action anything yet. Once I've shared everything, I'll tell you exactly what I need from each one. Let me share those now."</blockquote>
+        <p>Then share the documents one by one. Once they're all in, a single directing prompt does the work:</p>
+        <blockquote>"Now — starting with the funding submission: here's what I need..."</blockquote>
+        <p>The documents have done the context-setting themselves. Continuity is preserved across all three tasks. Claude hasn't run ahead in the wrong direction while you were still loading the picture.</p>
+        <em class="tag">The explicit hold is the part most people miss. It's what makes the rest of the move work.</em>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ══════════ VIGNETTE 1C(i) — Strategic Withholding: Feedback ══════════ -->
+<section class="bg-cream">
+  <div class="container">
+    <span class="section-label">Vignette · Asking for Feedback</span>
+
+    <div class="vignette">
+      <div class="scenario-label">Scenario</div>
+      <div class="scenario">
+        <p>Chris has spent the last month developing a proposal for a new peer support program targeting rural members. He's genuinely proud of it — it's innovative, addresses a real gap, and he thinks the three-tier model is the standout feature.</p>
+        <p>He opens Claude and types:</p>
+        <blockquote>"I've been developing a peer support program for our rural members and I think it's a really strong model — it's innovative and fills a genuine gap in the sector. Here's the proposal. Can you give me feedback?"</blockquote>
+        <p>Claude responds:</p>
+        <blockquote class="claude-response">"This is a really thoughtful and well-structured proposal! The three-tier peer support model is particularly innovative and directly addresses the rural service gap in a way that feels genuinely sector-leading. A few minor suggestions to strengthen it further..."</blockquote>
+        <p>Chris feels validated. He makes the minor tweaks and moves forward.</p>
+      </div>
+
+      <p class="prompt-q">What's the problem with how Chris set this up?</p>
+      <p class="prompt-why">What might he have missed as a result — and which element of the framework does this connect to?</p>
+
+      <button class="reveal-btn">↓ The Move</button>
+
+      <div class="reveal" style="display:none">
+        <h3>Strategic Withholding</h3>
+        <p>Claude didn't give Chris an honest assessment. It gave him a reflection of his own enthusiasm back at him — because he told it what to think before asking it to think.</p>
+        <p>LLMs are naturally sycophantic. When you lead with your opinion, the model anchors to it. Weaknesses get softened. Risks get minimised. The feedback feels good but doesn't serve you.</p>
+        <p>The fix is to withhold the opinion entirely — share the materials, set the context, but don't tell Claude what you think before asking what it thinks.</p>
+        <blockquote>"Here's a proposal I've been developing. Before I share my own thoughts on it, I want your honest assessment — what are the genuine strengths here, and what are the risks or weaknesses I might not be seeing?"</blockquote>
+        <p>That single change produces a fundamentally different response. Claude is no longer confirming your view. It's forming its own.</p>
+        <em class="tag">The opinion you withhold is the bias you avoid.</em>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ══════════ VIGNETTE 1C(ii) — Strategic Withholding: Ideas First ══════════ -->
+<section class="bg-warm">
+  <div class="container">
+    <span class="section-label">Vignette · Before You Share Your Idea</span>
+
+    <div class="vignette">
+      <div class="scenario-label">Scenario</div>
+      <div class="scenario">
+        <p>Graham needs to figure out how to respond to a difficult piece of feedback QAMH has received from a member organisation. The criticism is pointed and somewhat unfair — but the relationship matters and the response needs to be carefully calibrated.</p>
+        <p>He has a clear instinct about how to approach it: acknowledge the concern, gently reframe the context, and close by inviting further dialogue. He opens Claude and types:</p>
+        <blockquote>"I've received some difficult feedback from a member organisation — it's a bit pointed and not entirely fair, but the relationship matters. My thinking is to acknowledge the concern, gently reframe the context, and close by inviting further dialogue. Can you help me draft a response along those lines?"</blockquote>
+      </div>
+
+      <p class="prompt-q">What does Graham risk by leading with his idea?</p>
+      <p class="prompt-why">What would he gain by withholding it — and for how long?</p>
+
+      <button class="reveal-btn">↓ The Move</button>
+
+      <div class="reveal" style="display:none">
+        <h3>Strategic Withholding</h3>
+        <p>The moment Graham describes his approach, the conversation is anchored. Claude will evaluate his idea — refining it, improving it, building on it. But it will never escape its gravity.</p>
+        <p>The question Graham hasn't answered yet is: is his instinct the best option? He doesn't know, because he hasn't heard any alternatives.</p>
+        <p>The better move is to share the situation first — and ask Claude what it would consider before offering his own idea.</p>
+        <blockquote>"Here's the situation: [describes the feedback and the relationship context]. I'm working out how best to respond. Before I tell you what I'm thinking, what approaches would you consider here? What are the options, and what are the trade-offs?"</blockquote>
+        <p>Now Claude generates independently. Graham gets a genuine menu of options — some of which he may not have considered. He can then evaluate them, combine them, or decide his original instinct was right after all.</p>
+        <em class="tag">The idea you withhold is the option you haven't heard yet.</em>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ══════════ VIGNETTE 1D — Recording & Transcribing ══════════ -->
+<section class="bg-cream">
+  <div class="container">
+    <span class="section-label">Vignette · The Weekly Meeting</span>
+
+    <div class="vignette">
+      <div class="scenario-label">Scenario</div>
+      <div class="scenario">
+        <p>Every week, Kat meets with Chloe — her manager — to discuss the projects she's working on: priorities, blockers, new directions, decisions made. It's a rich conversation. Afterwards, Kat goes and does her work.</p>
+        <p>She often uses Claude to help with tasks that are directly connected to what came up in those meetings. But when she opens Claude, she has to re-explain the context from scratch each time — the background, the constraints, the decisions, the nuances of what was actually said.</p>
+      </div>
+
+      <p class="prompt-q">What could you do to give Claude genuine insight into those conversations — not just a summary you've reconstructed from memory?</p>
+      <p class="prompt-why">Why might a reconstruction from memory fall short?</p>
+
+      <button class="reveal-btn">↓ The Move</button>
+
+      <div class="reveal" style="display:none">
+        <h3>Recording &amp; Transcribing</h3>
+        <p>Record the conversation. Transcribe it. Feed the raw transcript into Claude.</p>
+        <p>The difference between a reconstructed summary and a raw transcript is significant. A summary is filtered through your memory and your current framing. A transcript contains the actual language used, the specific decisions made, the texture of how things were discussed — details you wouldn't think to include and couldn't reconstruct accurately even if you tried.</p>
+        <blockquote>"Here's the transcript from my weekly catch-up. Before we work on anything, I want you to read this so you have the real context — not just my summary of it."</blockquote>
+        <p>This is a pre-AI habit that dramatically amplifies everything that follows. It applies to any conversation that generates context: team meetings, client calls, collaborative sessions, debrief discussions.</p>
+        <em class="tag">The richest context you can give Claude is a conversation that actually happened. Capture it.</em>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ══════════ VIGNETTE 1E — Speaking Rather Than Typing ══════════ -->
+<section class="bg-warm">
+  <div class="container">
+    <span class="section-label">Vignette · The Hard Prompt</span>
+
+    <div class="vignette">
+      <div class="scenario-label">Scenario</div>
+      <div class="scenario">
+        <p>Chelsea is one of those people who can walk into a room and immediately articulate a complex situation with clarity, warmth, and nuance. In meetings, she's the one who names the thing everyone was struggling to say. Verbally, she's exceptional.</p>
+        <p>At the keyboard, it's a different story. Typing slows her down, flattens her thinking, and strips out the texture. She finds herself editing as she goes — cutting the nuance, simplifying the context, losing the thread. What ends up on screen rarely matches what was in her head.</p>
+        <p>She uses Claude regularly and genuinely finds it helpful. But she often finishes a session feeling more drained than she expected — not because the task was hard, but because getting the context in felt like hard work. Today's task involves no existing documents she can upload. What Claude needs is Chelsea's working knowledge of a situation — the history, the dynamics, the competing priorities — and that knowledge lives in her head, not on a page.</p>
+        <p>She sits down to start a prompt. She knows what she wants to say. She starts typing. Deletes. Starts again.</p>
+      </div>
+
+      <p class="prompt-q">What might serve Chelsea better here than typing?</p>
+      <p class="prompt-why">Is this about the tool, the task, or the person — or all three?</p>
+
+      <button class="reveal-btn">↓ The Move</button>
+
+      <div class="reveal" style="display:none">
+        <h3>Speaking Rather Than Typing</h3>
+        <p>Chelsea doesn't have a prompting problem. She has a medium problem.</p>
+        <p>Voice input removes the keyboard as a bottleneck between thought and context. Speaking feels natural to Chelsea in a way that typing doesn't — and the result is a richer, faster, more detailed prompt that actually matches what was in her head.</p>
+        <p>The move isn't for everyone. But for anyone who thinks faster than they type, finds editing-as-you-go strips away nuance, or regularly feels that the context they give Claude is a pale version of what they actually know — speaking is worth trying.</p>
+        <blockquote>Open Claude. Tap the microphone. Talk to it the way you'd explain the situation to a colleague. Don't edit. Just speak.</blockquote>
+        <p>The difference between a typed prompt and a spoken one — for the right person — is the difference between a summary and a briefing.</p>
+        <em class="tag">Play to your strengths. The medium is part of the tool.</em>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ══════════ VIGNETTE 1F — The Memory Check (moved from warm-up) ══════════ -->
+<section class="bg-cream">
+  <div class="container">
+    <span class="section-label">Vignette · Opening a New Session</span>
+
+    <div class="vignette">
+      <div class="scenario-label">Scenario</div>
+      <div class="scenario">
+        <p>Ryan is a consultant. His current project is a four-session AI training series for a team of staff at a mental health organisation. He's already delivered the first three sessions — and he's used Claude to help design and build all of them.</p>
+        <p>He's now sitting down to work on the final session. On his hard drive he has everything: the slide decks from all three sessions, the full transcripts from each delivery, the markdown planning documents, the activity materials, and the website he built for Session 3. It's a substantial body of work.</p>
+        <p>He opens a new Claude conversation. He's ready to get started.</p>
+      </div>
+
+      <p class="prompt-q">What's the first thing he does — before opening any of those files?</p>
+      <p class="prompt-why">Why might reaching for the hard drive not be the best first move?</p>
+
+      <button class="reveal-btn">↓ The Move</button>
+
+      <div class="reveal" style="display:none">
+        <h3>The Memory Check</h3>
+        <p>Before reaching for any of those materials, Ryan checks what Claude already knows.</p>
+        <blockquote>"I've been working with you over the past couple of months on a four-session AI training series for QAMH — Queensland Alliance for Mental Health. Together we've designed and built all three sessions delivered so far: the slides, the activities, the planning documents, the website for Session 3. I'm now working on Session 4, the final one. Before I share anything with you today, I want you to search your memory of our previous conversations and tell me what you already know about this project — the content we've covered, the decisions we've made, the participants, the design principles we've been working with. Tell me what you have, and I'll fill in the gaps."</blockquote>
+        <p>Claude searches its memory. It surfaces the session arc, the participant group, the key design decisions, the tone and philosophy of the training — much of it without a single file being uploaded.</p>
+        <p>The hard drive stays closed. The conversation starts from a richer position than any upload could have produced alone.</p>
+        <em class="tag">Ten seconds of checking saves ten minutes of uploading — and produces better context than a document ever could.</em>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ══════════ CLUSTER 1 SUMMARY ══════════ -->
+<section class="bg-navy">
+  <div class="container">
+    <span class="section-label">Cluster 1 · Summary</span>
+    <h2 class="section-title">Setting the right scene.</h2>
+    <p class="subtitle">Five judgment calls — all about what you do before and around the conversation.</p>
+
+    <div class="summary-grid">
+      <div class="summary-card">
+        <div class="summary-name">The Scene-Setting Move</div>
+        <div class="summary-desc">Orient the model before loading it. Tell it what you have, what order things will come in, and what you're trying to achieve. It reads everything that follows with a frame already active.</div>
+      </div>
+      <div class="summary-card">
+        <div class="summary-name">The Memory Check</div>
+        <div class="summary-desc">Before uploading anything, ask what the model already knows. The pause of ten seconds can save you ten minutes — and produces a richer starting point.</div>
+      </div>
+      <div class="summary-card">
+        <div class="summary-name">Strategic Withholding</div>
+        <div class="summary-desc">Content shared before framing shapes the frame. Deliberately hold back materials until the conversational conditions are right — then release them.</div>
+      </div>
+      <div class="summary-card">
+        <div class="summary-name">Recording &amp; Transcribing</div>
+        <div class="summary-desc">The richest context you can bring to an AI conversation is a conversation that actually happened. Record it. Transcribe it. Feed it in.</div>
+      </div>
+      <div class="summary-card">
+        <div class="summary-name">Speaking Rather Than Typing</div>
+        <div class="summary-desc">Voice gives you more freedom to think out loud, articulate complexity, and move faster. When a prompt feels hard to type — say it instead.</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ══════════ SECTION 6 — Cluster 2 intro ══════════ -->
+<section class="bg-navy">
+  <div class="container cluster-intro">
+    <span class="section-label">Cluster 2</span>
+    <h2 class="section-title">How you navigate the conversation</h2>
+    <p class="subtitle">What to do when the conversation drifts — or when a better path opens.</p>
+  </div>
+</section>
+
+<!-- ══════════ VIGNETTE 2A — Zoom-Out Interrupt ══════════ -->
+<section class="bg-cream">
+  <div class="container">
+    <span class="section-label">Vignette · Deep in the Weeds</span>
+
+    <div class="vignette">
+      <div class="scenario-label">Scenario</div>
+      <div class="scenario">
+        <p>Susanne has been working on a policy submission to the Queensland Government for the past hour. She's on her sixth round of edits on the opening paragraph — adjusting word choice, moving sentences around, trying to get the tone exactly right. The paragraph is getting better. She's about to move on to the next one.</p>
+      </div>
+
+      <p class="prompt-q">Before moving to the next paragraph — what might be worth doing first?</p>
+      <p class="prompt-why">Which element of the framework does this connect to — and what's the risk of not doing it?</p>
+
+      <button class="reveal-btn">↓ The Move</button>
+
+      <div class="reveal" style="display:none">
+        <h3>The Zoom-Out Interrupt</h3>
+        <p>Noticing when you've drifted into excessive detail and explicitly naming the need to pull back before continuing. The sunk cost of an hour's work can pull you deeper into the wrong level of resolution — unless you choose to interrupt it.</p>
+        <p><strong>Try:</strong></p>
+        <blockquote>"Before we keep going — step back and read the whole document as it stands. What's working well? What's the biggest structural issue? What should I actually be focusing on right now?"</blockquote>
+        <em class="tag">This question often surfaces that the paragraph you've been perfecting is in the wrong section entirely.</em>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ══════════ VIGNETTE 2B — Redirect on the Fly ══════════ -->
+<section class="bg-warm">
+  <div class="container">
+    <span class="section-label">Vignette · A Better Idea Appears</span>
+
+    <div class="vignette">
+      <div class="scenario-label">Scenario</div>
+      <div class="scenario">
+        <p>Jun has been working on a workforce data report for a funding body for the past 20 minutes. The conversation has produced a solid structure — methodology first, then findings, then recommendations. It's logical. But something feels off and Jun can't quite name it. The conversation keeps producing technically correct responses that somehow miss the point.</p>
+        <p>Jun is about to ask Claude to refine the methodology section again.</p>
+        <p>Then Claude includes a passing observation: the outcome data in section three is actually the most compelling thing in the whole document — the kind of number a funder immediately wants to see.</p>
+        <p>Jun stops.</p>
+      </div>
+
+      <p class="prompt-q">What does Jun do with that observation?</p>
+      <p class="prompt-why">What's the cost of ignoring it and continuing on the original path?</p>
+
+      <button class="reveal-btn">↓ The Move</button>
+
+      <div class="reveal" style="display:none">
+        <h3>The Redirect on the Fly</h3>
+        <p>The best direction often only becomes visible during the conversation itself. Jun doesn't owe the conversation its original structure. The pivot is free.</p>
+        <blockquote>"Hold on — that observation about the outcome data changes everything. Let's change direction. The whole document should lead with that number. Can you help me restructure from that starting point?"</blockquote>
+        <p>Treating the conversation as a live thinking tool rather than a production pipeline means staying alert to moments when something better appears — and being willing to take it without friction.</p>
+        <em class="tag">You never owe the conversation its original direction. The pivot is free.</em>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ══════════ VIGNETTE 2C — Thinking-Out-Loud Drop ══════════ -->
+<section class="bg-cream">
+  <div class="container">
+    <span class="section-label">Vignette · Can't Get It Down</span>
+
+    <div class="vignette">
+      <div class="scenario-label">Scenario</div>
+      <div class="scenario">
+        <p>Yumi has a half-formed idea for restructuring how QAMH supports member organisations through peer networks. She's been trying to write it out clearly before bringing it to Claude — but the idea won't crystallise on the page. After 20 minutes she's still stuck.</p>
+      </div>
+
+      <p class="prompt-q">What would you do?</p>
+      <p class="prompt-why">And why would that help? Think about which element of the framework this connects to — context, iteration, or collaboration?</p>
+
+      <button class="reveal-btn">↓ The Move</button>
+
+      <div class="reveal" style="display:none">
+        <h3>The Thinking-Out-Loud Drop</h3>
+        <p>The model works best when you bring it the rough thing, not the polished thing. Trying to pre-polish for Claude is wasted effort — and often blocks the idea from developing naturally.</p>
+        <p><strong>Try:</strong></p>
+        <blockquote>"I have this idea I'm not sure about yet. Let me just think out loud for a moment…"</blockquote>
+        <p>Then say the half-formed thing. Exactly as it is.</p>
+        <em class="tag">The model will find the shape in it. That's what it's there for.</em>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ══════════ CLUSTER 2 SUMMARY ══════════ -->
+<section class="bg-navy">
+  <div class="container">
+    <span class="section-label">Cluster 2 · Summary</span>
+    <h2 class="section-title">How you navigate the conversation.</h2>
+    <p class="subtitle">Three judgment calls for staying oriented when the conversation drifts — or when a better path opens.</p>
+    <div class="summary-grid">
+      <div class="summary-card">
+        <div class="summary-name">The Zoom-Out Interrupt</div>
+        <div class="summary-desc">When you've drifted into excessive detail, explicitly name the need to pull back. The sunk cost of time spent can pull you deeper into the wrong level — unless you choose to interrupt it.</div>
+      </div>
+      <div class="summary-card">
+        <div class="summary-name">The Redirect on the Fly</div>
+        <div class="summary-desc">The best direction often only becomes visible during the conversation. You never owe the conversation its original direction. The pivot is free.</div>
+      </div>
+      <div class="summary-card">
+        <div class="summary-name">The Thinking-Out-Loud Drop</div>
+        <div class="summary-desc">Bring the rough, half-formed thing to the model — not the polished version. The model finds the shape in it. That's what it's there for.</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ══════════ SECTION 7 — Cluster 3 intro ══════════ -->
+<section class="bg-navy">
+  <div class="container cluster-intro">
+    <span class="section-label">Cluster 3</span>
+    <h2 class="section-title">Shaping the collaboration</h2>
+    <p class="subtitle">Calibrating how the model works with you — not just what it produces.</p>
+  </div>
+</section>
+
+<!-- ══════════ VIGNETTE 3A — Output Calibration ══════════ -->
+<section class="bg-cream">
+  <div class="container">
+    <span class="section-label">Vignette · Not What You Needed</span>
+
+    <div class="vignette">
+      <div class="scenario-label">Scenario</div>
+      <div class="scenario">
+        <p>Annalise asks Claude to summarise the key themes from her consultation data. She receives back 1,200 words across eight dense paragraphs. The summary is thorough, accurate, and completely unusable for the purpose she had in mind.</p>
+        <p>She begins manually editing it down.</p>
+      </div>
+
+      <p class="prompt-q">Before editing — what's the faster move?</p>
+      <p class="prompt-why">And why would that help? Think about which element of the framework this connects to — context, iteration, or collaboration?</p>
+
+      <button class="reveal-btn">↓ The Move</button>
+
+      <div class="reveal" style="display:none">
+        <h3>Output Calibration</h3>
+        <p>Explicitly instructing the model on format, length, and register — and varying this deliberately as the task evolves. The model defaults to its own judgment about what a response should look like. That judgment is frequently misaligned with the current stage of work.</p>
+        <p><strong>Try:</strong></p>
+        <blockquote>"I need this in a completely different format. Five bullet points maximum. Each under 25 words. Nothing else."</blockquote>
+        <p><em>Or at the start:</em> "Keep your responses brief for now — just acknowledge that you've understood. We'll expand later."</p>
+        <p><em>Or the opposite:</em> "I won't limit you here — take creative freedom with this one."</p>
+        <em class="tag">Every stage of a task has a different optimal output format. Calibrate it explicitly.</em>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ══════════ VIGNETTE 3B — Cognitive Offload ══════════ -->
+<section class="bg-warm">
+  <div class="container">
+    <span class="section-label">Vignette · The Blank Screen</span>
+
+    <div class="vignette">
+      <div class="scenario-label">Scenario</div>
+      <div class="scenario">
+        <p>It's late on a Friday. Sasha has a complex task ahead — a strategic plan update — but her brain is foggy and she doesn't know where to begin. She stares at the blank screen. She tries to start. Nothing comes.</p>
+      </div>
+
+      <p class="prompt-q">What's the move when you can't generate anything yourself?</p>
+      <p class="prompt-why">And why would that help? Think about which element of the framework this connects to — context, iteration, or collaboration?</p>
+
+      <button class="reveal-btn">↓ The Move</button>
+
+      <div class="reveal" style="display:none">
+        <h3>The Cognitive Offload</h3>
+        <p>When bandwidth is low, shift the generative role to the model and position yourself as the corrector and quality filter rather than the originator. This is often <em>faster</em> than generating from scratch regardless of how you're feeling — and it produces better output.</p>
+        <p><strong>Try:</strong></p>
+        <blockquote>"I'm feeling foggy and I'm not sure where to start. You know quite a bit about my work from our previous conversations. Can you lay out what you think the main components of this strategic plan update should look like? I'll correct and redirect — I just need something to react to."</blockquote>
+        <em class="tag">Editing is always easier than generating. Let the model generate. You edit.</em>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ══════════ VIGNETTE 3C — Style Anchor ══════════ -->
+<section class="bg-cream">
+  <div class="container">
+    <span class="section-label">Vignette · Describing the Indescribable</span>
+
+    <div class="vignette">
+      <div class="scenario-label">Scenario</div>
+      <div class="scenario">
+        <p>Bernadette needs to write a funding acquittal report — a document type she hasn't produced before. She begins describing to Claude what she thinks it should include: the sections, the approximate length, the tone, the audience.</p>
+        <p>Claude produces something. It's fine, but it doesn't look or feel like what she had in mind.</p>
+      </div>
+
+      <p class="prompt-q">What would have been faster than describing it?</p>
+      <p class="prompt-why">And why would that help? Think about which element of the framework this connects to — context, iteration, or collaboration?</p>
+
+      <button class="reveal-btn">↓ The Move</button>
+
+      <div class="reveal" style="display:none">
+        <h3>The Style Anchor</h3>
+        <p>Rather than describing what you want in the abstract, provide an existing artifact and ask the model to use it as a baseline. Showing beats telling — and this applies just as much when instructing a model as when teaching in a classroom.</p>
+        <p><strong>Try:</strong></p>
+        <blockquote>"I'm not going to describe the format. Instead, here's an example of the kind of document I want to produce. Please study the structure, the tone, the length, and the way information is organised — but ignore the content. Now, here's what I actually need to write about…"</blockquote>
+        <em class="tag">Previous examples do more contextual work than any description. Use them.</em>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ══════════ CLUSTER 3 SUMMARY ══════════ -->
+<section class="bg-navy">
+  <div class="container">
+    <span class="section-label">Cluster 3 · Summary</span>
+    <h2 class="section-title">Shaping the collaboration.</h2>
+    <p class="subtitle">Three judgment calls for calibrating how the model works with you — not just what it produces.</p>
+    <div class="summary-grid">
+      <div class="summary-card">
+        <div class="summary-name">Output Calibration</div>
+        <div class="summary-desc">The model defaults to its own judgment about what a response should look like. That judgment is frequently misaligned with what you actually need. Calibrate it explicitly — every time, for every stage.</div>
+      </div>
+      <div class="summary-card">
+        <div class="summary-name">The Cognitive Offload</div>
+        <div class="summary-desc">Editing is always easier than generating. When bandwidth is low, shift the generative role to the model and position yourself as the corrector. This is often faster regardless of how you're feeling.</div>
+      </div>
+      <div class="summary-card">
+        <div class="summary-name">The Style Anchor</div>
+        <div class="summary-desc">Showing beats telling — and this applies just as much when instructing a model as when teaching. Previous examples do more contextual work than any description. Use them.</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ══════════ SECTION 8 — Cluster 4 intro ══════════ -->
+<section class="bg-navy">
+  <div class="container cluster-intro">
+    <span class="section-label">Cluster 4</span>
+    <h2 class="section-title">Technical and strategic reach</h2>
+    <p class="subtitle">The moves that extend what's possible — without requiring technical expertise.</p>
+  </div>
+</section>
+
+<!-- ══════════ VIGNETTE 4A — Capability Consultation ══════════ -->
+<section class="bg-cream">
+  <div class="container">
+    <span class="section-label">Vignette · The Premature Request</span>
+
+    <div class="vignette">
+      <div class="scenario-label">Scenario</div>
+      <div class="scenario">
+        <p>Michelle wants to present her program outcomes to the board next week in a visually compelling way. She types:</p>
+        <blockquote>"Create a PowerPoint presentation about our program outcomes."</blockquote>
+        <p>Claude produces a presentation. It's structured sensibly. But it's not quite what she had in mind — and she's not sure what she actually wanted instead.</p>
+      </div>
+
+      <p class="prompt-q">What question should have come before the request?</p>
+      <p class="prompt-why">And why would that help? Think about which element of the framework this connects to — context, iteration, or collaboration?</p>
+
+      <button class="reveal-btn">↓ The Move</button>
+
+      <div class="reveal" style="display:none">
+        <h3>The Capability Consultation</h3>
+        <p>Before requesting a specific output, ask the model what its actual options and capabilities are. Surface the strategic landscape before committing to a direction.</p>
+        <p><strong>Try:</strong></p>
+        <blockquote>"I want to present our program outcomes to the board next week. Before I ask you to produce anything — what are the different ways you could help me create this? What are the options? What are the trade-offs between them?"</blockquote>
+        <em class="tag">You can only choose well between options you know exist.</em>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ══════════ VIGNETTE 4B — Paced Walkthrough ══════════ -->
+<section class="bg-warm">
+  <div class="container">
+    <span class="section-label">Vignette · Following Twelve Steps</span>
+
+    <div class="vignette">
+      <div class="scenario-label">Scenario</div>
+      <div class="scenario">
+        <p>Asha asks Claude how to set up a shared folder structure in SharePoint. Claude responds with a numbered list of twelve steps.</p>
+        <p>They start following the steps. Step 4 doesn't match what they're seeing on screen. They go back to Claude, explain the discrepancy. Claude gives them three more steps. They're not sure which step they're on anymore.</p>
+      </div>
+
+      <p class="prompt-q">What would have prevented this?</p>
+      <p class="prompt-why">And why would that help? Think about which element of the framework this connects to — context, iteration, or collaboration?</p>
+
+      <button class="reveal-btn">↓ The Move</button>
+
+      <div class="reveal" style="display:none">
+        <h3>The Paced Walkthrough</h3>
+        <p>When navigating any technical task outside the conversation — in software, a browser, a file system — share a screenshot of what you're actually seeing and ask for instructions <em>one at a time</em>, confirming completion before the next step is given.</p>
+        <p><strong>Try:</strong></p>
+        <blockquote>"Please give me one instruction at a time. I'll let you know when I've completed each one before we move to the next."</blockquote>
+        <em class="tag">The real-time loop catches errors before they compound. You stay calibrated to each other.</em>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ══════════ CLUSTER 4 SUMMARY ══════════ -->
+<section class="bg-navy">
+  <div class="container">
+    <span class="section-label">Cluster 4 · Summary</span>
+    <h2 class="section-title">Technical and strategic reach.</h2>
+    <p class="subtitle">Three judgment calls that extend what's possible — without requiring technical expertise.</p>
+    <div class="summary-grid">
+      <div class="summary-card">
+        <div class="summary-name">The Capability Consultation</div>
+        <div class="summary-desc">Before requesting a specific output, ask what's possible. Surface the strategic landscape before committing to a direction. You can only choose well between options you know exist.</div>
+      </div>
+      <div class="summary-card">
+        <div class="summary-name">The Paced Walkthrough</div>
+        <div class="summary-desc">For any technical task outside the conversation, one instruction at a time with a screenshot at each step. The real-time loop catches errors before they compound.</div>
+      </div>
+      <div class="summary-card">
+        <div class="summary-name">The Cross-Instance Translation</div>
+        <div class="summary-desc">Ask conversational Claude to write the prompt for specialised Claude. Claude speaks Claude better than you do. You stay in natural language at every boundary.</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ══════════ MULTI-STEP VIGNETTE — The Planner App ══════════ -->
+<section class="bg-warm">
+  <div class="container">
+    <h2 class="section-title">🌻 Build Something That Fits You</h2>
+
+    <div class="vignette multistep" style="margin-top:2rem;">
+
+      <div class="scenario-label">The Setup</div>
+      <div class="scenario" style="margin-bottom:2.5rem;">
+        <p>Imagine you work in an environment with extremely loose structure. You're self-directed — no one is watching the clock, and you decide what to work on and when. You also have ADHD, which means you struggle to initiate high-stakes tasks and tend to hyperfixate on lower-priority work when you should be doing something else.</p>
+        <p>You've tried Notion, calendar blocking, various productivity apps. None of them quite fit the specific shape of how your brain works. You find yourself thinking: <em>what if I could build something that actually fits me?</em></p>
+        <p>You decide to try building a custom daily planner app using Claude's help. You want it to handle daily, weekly, and monthly structure, track progress across larger projects, and include features that are specifically designed for your ADHD quirks.</p>
+      </div>
+
+      <!-- Step 1 -->
+      <div class="step-item">
+        <span class="step-badge">Step 01</span>
+        <div class="step-scenario">
+          <p>You have a vision. You know roughly what you want. You open Claude.</p>
+        </div>
+        <p class="prompt-q">What's the first thing you do?</p>
+        <p class="prompt-why">Why that, rather than jumping straight into building?</p>
+        <button class="reveal-btn">↓ The Move</button>
+        <div class="reveal" style="display:none">
+          <h3>The Thinking-Out-Loud Drop + Scene-Setting</h3>
+          <p>You don't start building. You start <em>thinking</em> — out loud, with Claude as the thinking partner. Describe your brain, your quirks, your workflow, your frustrations with other tools. Get everything out before you architect anything.</p>
+          <blockquote>"I have ADHD and I've never found a planning tool that works for my brain. Let me describe what I need and what hasn't worked before, and I want us to brainstorm what a custom tool might look like..."</blockquote>
+          <em class="tag">The rough thing first. The model finds the shape in it.</em>
+        </div>
+      </div>
+
+      <!-- Step 2 -->
+      <div class="step-item">
+        <span class="step-badge">Step 02</span>
+        <div class="step-scenario">
+          <p>You've had a rich brainstorming conversation. You have pages of ideas, features, and reasoning. Before you start building anything technical, what do you do with all of this?</p>
+        </div>
+        <p class="prompt-q">How do you capture and carry this thinking forward?</p>
+        <p class="prompt-why">Why not just start building from the conversation?</p>
+        <button class="reveal-btn">↓ The Move</button>
+        <div class="reveal" style="display:none">
+          <h3>The Project Handoff Document</h3>
+          <p>Ask Claude to crystallise everything into a structured Markdown document: the purpose of the app, every feature with the reasoning behind it, the design principles, and a technical spec. This document travels with the project and anchors every future conversation.</p>
+          <blockquote>"Before we build anything, I want you to produce a Markdown planning document that captures everything we've just discussed — the purpose, all the features and why each one exists, and a technical spec. This will be the foundation document for the build."</blockquote>
+          <em class="tag">The conversation is thinking. The document is the decision. Don't skip it.</em>
+        </div>
+      </div>
+
+      <!-- Step 3 -->
+      <div class="step-item">
+        <span class="step-badge">Step 03</span>
+        <div class="step-scenario">
+          <p>You have your Markdown planning document. You're ready to start actually building the app. Where do you go?</p>
+        </div>
+        <p class="prompt-q">Which environment do you move into, and why?</p>
+        <button class="reveal-btn">↓ The Move</button>
+        <div class="reveal" style="display:none">
+          <h3>Knowing When to Switch Tools</h3>
+          <p>You move into VS Code with Claude Code. The chat window is for thinking and designing. Claude Code is for building and iterating on technical work. The Markdown document goes into the project folder — Claude Code reads it and uses it as its foundation.</p>
+          <em class="tag">Different tools for different stages. Know which is which.</em>
+        </div>
+      </div>
+
+      <!-- Step 4 -->
+      <div class="step-item">
+        <span class="step-badge">Step 04</span>
+        <div class="step-scenario">
+          <p>You're working in Claude Code. The app is taking shape. You want to make a change — something about how the weekly view works. You know what you want in plain language but you're not sure how to describe it to Claude Code precisely.</p>
+        </div>
+        <p class="prompt-q">Where do you go to work out how to describe this change?</p>
+        <p class="prompt-why">Why not just describe it directly to Claude Code?</p>
+        <button class="reveal-btn">↓ The Move</button>
+        <div class="reveal" style="display:none">
+          <h3>The Cross-Instance Translation</h3>
+          <p>Go back to the normal Claude chat window. Describe what you want in plain language. Ask Claude to generate the best possible prompt to give to Claude Code. Claude knows how to talk to other instances of Claude far better than you do.</p>
+          <blockquote>"I want to describe a change to make to my app, and I need you to translate this into the best prompt to give to Claude Code. Here's what I want in plain language: [describe it]."</blockquote>
+          <em class="tag">You stay in natural language. Claude handles the dialect at every boundary.</em>
+        </div>
+      </div>
+
+      <!-- Step 5 -->
+      <div class="step-item">
+        <span class="step-badge">Step 05</span>
+        <div class="step-scenario">
+          <p>The app works locally. You want it live — accessible from any browser, shareable with anyone.</p>
+        </div>
+        <p class="prompt-q">How do you get a working local app onto the internet if you don't know how to deploy things?</p>
+        <p class="prompt-why">What's the key to making a technically unfamiliar process manageable?</p>
+        <button class="reveal-btn">↓ The Move</button>
+        <div class="reveal" style="display:none">
+          <h3>The Paced Walkthrough</h3>
+          <p>Ask Claude how to deploy it — but ask for instructions one step at a time. Share a screenshot of what you're actually seeing. Confirm completion before the next step is given. The compounding-error problem disappears entirely.</p>
+          <blockquote>"I want to deploy this app. Please give me one instruction at a time, and I'll share a screenshot of what I'm seeing at each step. Wait for my confirmation before moving on."</blockquote>
+          <em class="tag">The skill isn't knowing how to deploy. It's knowing how to ask.</em>
+        </div>
+      </div>
+
+      <!-- Final reveal -->
+      <div class="final-reveal-card">
+        <h3>The result.</h3>
+        <p>A real, live, working daily planner — built specifically for one person's brain. No coding background. No technical training. Just the process you've been building all along.</p>
+      </div>
+
+    </div>
+  </div>
+</section>
+
+<!-- ══════════ SECTION 10 — The Frontier ══════════ -->
+<section class="bg-navy">
+  <div class="container">
+    <span class="section-label">What Comes Next</span>
+    <h2 class="section-title">Beyond the chat window</h2>
+    <p class="subtitle">The same skills. Expanded reach.</p>
+
+    <p style="color:var(--muted-white); text-align:center; max-width:780px; margin:0 auto 3rem; font-size:1.08rem; line-height:1.7;">
+      AI no longer lives only in a browser tab. It's integrated into the tools you already use. The skills you've built in conversation — context-setting, calibration, collaboration — are the same skills that make these integrations powerful.
+    </p>
+
+    <div class="grid-2">
+      <div class="card-navy frontier-card">
+        <div class="icon">✦</div>
+        <h4>Claude in PowerPoint</h4>
+        <p>Design your presentation in conversation first. Then translate.</p>
+      </div>
+      <div class="card-navy frontier-card">
+        <div class="icon">✦</div>
+        <h4>Claude Skills</h4>
+        <p>Build reusable instruction sets for your most common tasks. Your context, permanently available.</p>
+      </div>
+      <div class="card-navy frontier-card">
+        <div class="icon">✦</div>
+        <h4>Claude CoWork</h4>
+        <p>Automate file and task workflows. Non-technical. Conversationally built.</p>
+      </div>
+      <div class="card-navy frontier-card">
+        <div class="icon">✦</div>
+        <h4>Claude Code</h4>
+        <p>Build things. Apps. Tools. Automations. In plain language.</p>
+      </div>
+    </div>
+
+    <p style="font-family:'DM Serif Display',serif; font-style:italic; color:var(--terracotta); font-size:clamp(1.4rem,2.4vw,1.9rem); line-height:1.4; max-width:760px; margin:3rem auto 0; text-align:center;">
+      The skill you've been building is the same skill that unlocks all of this.
+    </p>
+  </div>
+</section>
+
+<!-- ══════════ MULTI-STEP VIGNETTE — Learning Claude Skills ══════════ -->
+<section class="bg-cream">
+  <div class="container">
+    <span class="section-label">A Final Example</span>
+    <h2 class="section-title">Learning something new with what you already know.</h2>
+    <p class="subtitle" style="color:var(--muted-ink);">This is the process I used to begin building my own Claude Skills — as a complete beginner. Every step is something you now know how to do.</p>
+
+    <div class="vignette multistep" style="margin-top:2rem;">
+
+      <div class="scenario-label">The Setup</div>
+      <div class="scenario" style="margin-bottom:2.5rem;">
+        <p>You've heard about Claude Skills — persistent, reusable instruction sets that encode your context, your preferences, and your working style permanently into Claude. Instead of re-explaining your role, your standards, and your approach every time you start a conversation, a skill does it for you automatically.</p>
+        <p>You want to build skills that genuinely fit your specific work. But you've never built one before and you don't know where to start.</p>
+      </div>
+
+      <!-- Step 1 -->
+      <div class="step-item">
+        <span class="step-badge">Step 01</span>
+        <div class="step-scenario">
+          <p>You want to learn about Claude Skills before you build anything. You could read the official Anthropic documentation. But you suspect there's a richer source of practical, real-world tips that goes beyond the official materials.</p>
+        </div>
+        <p class="prompt-q">Where do you go for the best knowledge — and how do you ask for it?</p>
+        <p class="prompt-why">What quality signals matter when selecting resources, and how do you surface them efficiently?</p>
+        <button class="reveal-btn">↓ The Move</button>
+        <div class="reveal" style="display:none">
+          <h3>Scene-Setting + Capability Consultation</h3>
+          <p>Here is the actual prompt used to open the conversation:</p>
+          <blockquote>"I'm aware of the 'Claude Skills' function but I don't know anything about how it works or how to leverage it well for my own work. My goal today is to learn about this capability and ultimately build some custom skills that best fit my unique needs. First, I want you to search through your memory of what you know about my work and the kind of tasks I regularly work on. Then I want you to search the web for resources that provide tutorials, use case examples, and best practices that are best fitted for my specific kinds of work. YouTube videos are a particularly rich source of information, so I want you to include this in your search — and when selecting videos, I want you to consider both content relevance as well as quality, for example videos with high rates of views and likes. Please compile a list of about 10 resources and rank order them from most helpful to least."</blockquote>
+          <p>Claude searched its memory, ran multiple web searches, fetched view counts from YouTube, and returned this ranked list:</p>
+          <div class="resource-list-embed">
+            <div class="resource-item">
+              <div class="resource-rank">1</div>
+              <div class="resource-content">
+                <p class="resource-title"><a href="https://support.claude.com/en/articles/12512198-how-to-create-custom-skills" target="_blank">Anthropic Official Help: How to Create Custom Skills</a></p>
+                <div class="resource-badges"><span class="resource-badge badge-docs">Official docs</span></div>
+                <p class="resource-desc">Anthropic's own step-by-step guide to building SKILL.md files. Covers structure, best practices, composability, and security.</p>
+                <p class="resource-why">→ Authoritative, always up to date, and covers the skill creator tool you'll use to bootstrap your first skills.</p>
+              </div>
+            </div>
+            <div class="resource-item">
+              <div class="resource-rank">2</div>
+              <div class="resource-content">
+                <p class="resource-title"><a href="https://resources.anthropic.com/hubfs/The-Complete-Guide-to-Building-Skill-for-Claude.pdf" target="_blank">The Complete Guide to Building Skills for Claude (Anthropic, 28-page PDF)</a></p>
+                <div class="resource-badges"><span class="resource-badge badge-pdf">PDF guide</span></div>
+                <p class="resource-desc">Anthropic's comprehensive written guide — covers the full lifecycle from designing, uploading, and deploying skills to organisation-wide distribution.</p>
+                <p class="resource-why">→ More depth than the help article; read this alongside the official docs for a complete mental model before you build.</p>
+              </div>
+            </div>
+            <div class="resource-item">
+              <div class="resource-rank">3</div>
+              <div class="resource-content">
+                <p class="resource-title"><a href="https://www.youtube.com/watch?v=YkpEX_jlb04" target="_blank">Full Claude Skills Tutorial for Beginners in 2026 — AI Foundations (YouTube)</a></p>
+                <div class="resource-badges"><span class="resource-badge badge-yt">YouTube</span><span class="resource-badge badge-views">84,232 views · 46 min · Mar 2026</span></div>
+                <p class="resource-desc">The highest-viewed skills-specific tutorial. Introduces the DBS framework (Direction, Blueprints, Solutions). Builds two live skills: a daily-brief automation and a research-to-presentation pipeline.</p>
+                <p class="resource-why">→ Best single video to watch first. The DBS framework maps directly onto consultancy and academic writing workflows.</p>
+              </div>
+            </div>
+            <div class="resource-item">
+              <div class="resource-rank">4</div>
+              <div class="resource-content">
+                <p class="resource-title"><a href="https://www.youtube.com/watch?v=MZZCW179nKM" target="_blank">Claude Skills Explained: Reusable AI Workflows — Claire Vo / How I AI (YouTube)</a></p>
+                <div class="resource-badges"><span class="resource-badge badge-yt">YouTube</span><span class="resource-badge badge-views">46,247 views · 27 min · Oct 2025</span></div>
+                <p class="resource-desc">One of the earliest and most cited skills explainers — published the week the feature launched. Covers skills vs Projects vs custom GPTs, SKILL.md structure.</p>
+                <p class="resource-why">→ Templates translate directly to student feedback and thesis supervision workflows.</p>
+              </div>
+            </div>
+            <div class="resource-item">
+              <div class="resource-rank">5</div>
+              <div class="resource-content">
+                <p class="resource-title"><a href="https://www.lennysnewsletter.com/p/claude-skills-explained" target="_blank">Claude Skills Explained — Lenny's Newsletter (transcript + audio)</a></p>
+                <div class="resource-badges"><span class="resource-badge badge-art">Article / podcast</span></div>
+                <p class="resource-desc">Companion written resource to the Claire Vo video — includes a full transcript, podcast audio, and curated examples from a product-thinking lens.</p>
+                <p class="resource-why">→ Useful for the TaiLORED IDEAS consultancy angle — directly applicable to pitching skills-powered deliverables to clients.</p>
+              </div>
+            </div>
+            <div class="resource-item">
+              <div class="resource-rank">6</div>
+              <div class="resource-content">
+                <p class="resource-title"><a href="https://www.codecademy.com/article/how-to-build-claude-skills" target="_blank">How to Build Claude Skills: Lesson Plan Generator Tutorial — Codecademy</a></p>
+                <div class="resource-badges"><span class="resource-badge badge-art">Tutorial article</span></div>
+                <p class="resource-desc">Hands-on article walking through building a lesson-plan generator skill from scratch. Covers skill metadata and how Claude discovers and triggers skills automatically.</p>
+                <p class="resource-why">→ Almost identical to building an R Markdown guide skill or APA results section skill. Very directly applicable.</p>
+              </div>
+            </div>
+            <div class="resource-item">
+              <div class="resource-rank">7</div>
+              <div class="resource-content">
+                <p class="resource-title"><a href="https://towardsdatascience.com/how-to-build-a-production-ready-claude-code-skill/" target="_blank">How to Build a Production-Ready Claude Code Skill — Towards Data Science</a></p>
+                <div class="resource-badges"><span class="resource-badge badge-art">Technical article</span><span class="resource-badge badge-views">Mar 2026</span></div>
+                <p class="resource-desc">Covers skill design with progressive disclosure, distribution options, and common gotchas. Written for developers wanting to share skills publicly.</p>
+                <p class="resource-why">→ Relevant when ready to move from personal-use skills to shareable TaiLORED IDEAS deliverables.</p>
+              </div>
+            </div>
+            <div class="resource-item">
+              <div class="resource-rank">8</div>
+              <div class="resource-content">
+                <p class="resource-title"><a href="https://ruben.substack.com/p/claude-skills" target="_blank">Claude Skills deep-dive — Ruben Hassid (Substack)</a></p>
+                <div class="resource-badges"><span class="resource-badge badge-art">Substack article</span><span class="resource-badge badge-views">Apr 2026</span></div>
+                <p class="resource-desc">Practitioner review flagging non-obvious failure modes — why skill descriptions need concrete trigger phrases, not abstract ones.</p>
+                <p class="resource-why">→ Critical trigger-phrase advice for getting skills to fire reliably.</p>
+              </div>
+            </div>
+            <div class="resource-item">
+              <div class="resource-rank">9</div>
+              <div class="resource-content">
+                <p class="resource-title"><a href="https://www.youtube.com/watch?v=2prubd1IZ7U" target="_blank">Claude Skills Tutorial: Connectors, Plugins &amp; Automation — Ansh Mehra (YouTube)</a></p>
+                <div class="resource-badges"><span class="resource-badge badge-yt">YouTube</span><span class="resource-badge badge-views">Mar 2026</span></div>
+                <p class="resource-desc">Focused on connecting skills to external tools (Gmail, Slack, web search). Shows how to run tests and evaluations on skills.</p>
+                <p class="resource-why">→ Demonstrates no-code, workflow-based AI automation relevant to the QAMH training context.</p>
+              </div>
+            </div>
+            <div class="resource-item">
+              <div class="resource-rank">10</div>
+              <div class="resource-content">
+                <p class="resource-title"><a href="https://simonwillison.net/2025/oct/16/claude-skills" target="_blank">Claude Skills are awesome — Simon Willison's Weblog</a></p>
+                <div class="resource-badges"><span class="resource-badge badge-art">Blog post</span><span class="resource-badge badge-views">Oct 2025</span></div>
+                <p class="resource-desc">Written the day skills launched by one of the most respected technical bloggers on AI/LLMs. Short but conceptually rich — explains why skills may be more significant than MCP for everyday users.</p>
+                <p class="resource-why">→ Worth reading for the "why this matters" framing when explaining skills to QAMH clients.</p>
+              </div>
+            </div>
+          </div>
+          <div class="claude-response-block">Claude also drew on its memory of previous conversations to produce a prioritised list of specific skill ideas tailored to this work profile — covering academic supervision, research writing, consultancy, and technical workflows. One of the strongest candidates: an <strong>honours thesis feedback skill</strong>. That's the one we're going to build.</div>
+          <em class="tag">Scene-setting + memory check + capability consultation + quality criteria — all in one opening prompt.</em>
+        </div>
+      </div>
+
+      <!-- Step 2 -->
+      <div class="step-item">
+        <span class="step-badge">Step 02</span>
+        <div class="step-scenario">
+          <p>You now have ten resources in front of you. The official PDF alone is 28 pages. The top YouTube video is 46 minutes. Absorbing all of this would take hours.</p>
+        </div>
+        <p class="prompt-q">What do you prioritise — and what do you actually do with those materials?</p>
+        <p class="prompt-why">Why might videos be a richer source than official documentation for what you're trying to learn?</p>
+        <button class="reveal-btn">↓ The Move</button>
+        <div class="reveal" style="display:none">
+          <h3>Prioritising and Extracting</h3>
+          <p>Official documentation tells you how things work. Tutorial creators tell you how things work <em>in practice</em> — the failure modes, the non-obvious tricks, the things discovered through hours of experimentation that official docs don't mention.</p>
+          <p>That's why videos #3 and #4 are the priority. High view counts (84K and 46K) are a quality signal: thousands of people have already found them worth their time. But watching 46-minute videos is slow. The move is to extract the transcripts instead.</p>
+          <p><strong>How to get a YouTube transcript:</strong></p>
+          <ol class="transcript-steps">
+            <li>Open the YouTube video in your browser</li>
+            <li>Below the video, find the grey description box and click the <strong>More</strong> button</li>
+            <li>Scroll to the bottom of the expanded description and click <strong>Show transcript</strong></li>
+            <li>The transcript appears alongside the video on the right-hand side</li>
+            <li>Click and drag to select and copy the full transcript text</li>
+            <li>Paste into a plain text file and save — repeat for each video you want to use</li>
+          </ol>
+          <em class="tag">You've just turned hours of passive watching into something a model can read in seconds.</em>
+        </div>
+      </div>
+
+      <!-- Step 3 -->
+      <div class="step-item">
+        <span class="step-badge">Step 03</span>
+        <div class="step-scenario">
+          <p>You have two transcript files saved. You're ready to load them into Claude. The honours thesis feedback skill is the target.</p>
+        </div>
+        <p class="prompt-q">How do you load these transcripts in a way that makes them most useful?</p>
+        <p class="prompt-why">What's the difference between dumping files in and loading them with intention?</p>
+        <button class="reveal-btn">↓ The Move</button>
+        <div class="reveal" style="display:none">
+          <h3>Loading the Transcripts with a Lens</h3>
+          <p>The transcripts aren't dumped in. They're loaded with a specific use case and a specific goal already active:</p>
+          <blockquote>"I've checked out a couple of YouTube videos and provided the transcripts here. I want you to read through these transcripts to keep an eye out for the specialist guidance, tips, tricks, and hacks that the experts talk about that aren't necessarily covered well in the standard advice from official Anthropic materials. For our first experimentation with building a custom skill, I'd like to focus on building an honours thesis feedback skill. So when you're reading through these transcripts, keep this use case in mind and extract any important information that will best help us build this skill."</blockquote>
+          <div class="claude-response-block">Claude read both transcripts and returned a detailed list of seven non-obvious insights from the videos — things not covered in official documentation. For each one, it explained exactly how the insight applied to the honours thesis feedback skill specifically: the description field as a trigger mechanism, the DBS architecture, the importance of explicit "read this file" instructions in the workflow steps, and more.</div>
+          <em class="tag">The model reads the same transcripts differently depending on what it's been told to look for. The lens is the move.</em>
+        </div>
+      </div>
+
+      <!-- Step 4 -->
+      <div class="step-item">
+        <span class="step-badge">Step 04</span>
+        <div class="step-scenario">
+          <p>Claude has surfaced the non-obvious insights from the videos. Now it's time to actually build the skill. But before asking Claude to build anything, there's one more thing worth doing first.</p>
+        </div>
+        <p class="prompt-q">What do you do before asking Claude to start building the skill files?</p>
+        <p class="prompt-why">What knowledge source is sitting in Claude's memory that would be wasted if you skipped straight to building?</p>
+        <button class="reveal-btn">↓ The Move</button>
+        <div class="reveal" style="display:none">
+          <h3>The Memory Check + Build</h3>
+          <p>Before building anything, ask Claude to draw on its memory of your actual supervision practice — not a generic honours feedback skill, but one built from real examples of how you actually work:</p>
+          <blockquote>"Before I get into building, I want you to search through your memory of our conversations and specifically look for instances where I have worked with you to provide feedback to honour theses. From these conversations, I want you to extract everything relevant that would help us build this skill with precision and high impact. Pay attention not only to the different forms of feedback I give (sentence level, structure, global narrative) and types of documents I respond to (introductions, methods, results), but also, the kinds of ways I tend to edit the advice you give me on a first pass. We have had many conversations where you've helped me with feedback, and I recall that I have often changed your output in particular ways to better represent my own voice, or to get a sharper take on the actual problem and its solution. Pay attention to all of this and use this as the foundation for creating the kinds of files you've told me are necessary for setting up a gold-standard skill."</blockquote>
+          <div class="claude-response-block">Claude searched the conversation history and surfaced specific patterns: the way introductions tend to suffer from identity crises between aims and background, how sentence-level annotation clusters around the same error types across different students, the characteristic edits made to soften over-prescriptive feedback while sharpening the diagnosis. It used all of this to build the skill files from real practice rather than abstract description.</div>
+          <p>It then produced three files:</p>
+          <div class="files-produced">
+            <div class="file-card"><span class="file-icon">📄</span>SKILL.md</div>
+            <div class="file-card"><span class="file-icon">📄</span>voice-and-style-guide.md</div>
+            <div class="file-card"><span class="file-icon">📄</span>common-errors-and-patterns.md</div>
+          </div>
+          <em class="tag">The skill isn't built from a description of your work. It's built from your actual work.</em>
+        </div>
+      </div>
+
+      <!-- Step 5 -->
+      <div class="step-item">
+        <span class="step-badge">Step 05</span>
+        <div class="step-scenario">
+          <p>The three skill files are sitting in the conversation. They look thorough and well-structured. The instinct is to install them and get started.</p>
+        </div>
+        <p class="prompt-q">What's the move most people skip at this point?</p>
+        <p class="prompt-why">Why might a file that looks good on the surface still have meaningful problems?</p>
+        <button class="reveal-btn">↓ The Move</button>
+        <div class="reveal" style="display:none">
+          <h3>The Quality Audit</h3>
+          <p>Before installing, ask Claude to critically evaluate what it just built — using the same transcripts as the benchmark:</p>
+          <blockquote>"Before I action any next steps with using these files to build the skill, I want you to critically analyse the quality of the files you've built here. Specifically, I want you to:
+            <br><br>1. Re-read the transcripts from the YouTube videos
+            <br>2. Pay attention to any advice in those videos that is directly relevant to the quality of these files
+            <br>3. Identify whether that advice has been applied well or not
+            <br>4. Create a list of any meaningful improvements that should be made to these documents after your analysis process"</blockquote>
+          <div class="claude-response-block">Claude returned six detailed, specific issues — two rated high severity, four medium. Among them: the workflow steps didn't explicitly instruct Claude to read the reference files; the description was too long and too abstract to reliably trigger the skill; the reference files described Ryan's style rather than demonstrated it; there were no test cases or evaluation criteria anywhere in the files. None of these were visible from a surface read of the documents.</div>
+          <em class="tag">The impressive-looking output is often the one with the hidden flaw. Always audit before you install.</em>
+        </div>
+      </div>
+
+      <!-- Step 6 -->
+      <div class="step-item">
+        <span class="step-badge">Step 06</span>
+        <div class="step-scenario">
+          <p>Six improvements have been identified. Some Claude can fix itself. Some require input only you can provide.</p>
+        </div>
+        <p class="prompt-q">How do you handle the split between what Claude can action and what only you can do?</p>
+        <button class="reveal-btn">↓ The Move</button>
+        <div class="reveal" style="display:none">
+          <h3>The Cognitive Offload + Task Handoff</h3>
+          <blockquote>"I now want you to action all improvements you've identified to the best of your ability. If any changes require you to inject actual prompt examples I've used, then pull this from your memory of our conversations. For any changes that you believe are necessary but you are unable to action them yourself because they require me to do something, then list those tasks for me to complete."</blockquote>
+          <div class="claude-response-block">Claude rewrote all three existing files and created a fourth — feedback-examples.md — containing three complete anonymised feedback documents reconstructed from memory of real past sessions. It packaged all four files into a single correctly-structured ZIP file ready to install. It then produced a clear list of four remaining tasks requiring human input: add a real feedback exemplar from Google Drive, add the actual UQ marking rubric, run the three built-in test cases after installing, and iterate based on what goes wrong.</div>
+          <p>Installing the skill:</p>
+          <div class="files-produced">
+            <div class="file-card"><span class="file-icon">📄</span>SKILL.md</div>
+            <div class="file-card"><span class="file-icon">📄</span>voice-and-style-guide.md</div>
+            <div class="file-card"><span class="file-icon">📄</span>common-errors-and-patterns.md</div>
+            <div class="file-card"><span class="file-icon">📄</span>feedback-examples.md</div>
+          </div>
+          <ol class="transcript-steps">
+            <li>Open Claude settings</li>
+            <li>Navigate to <strong>Features → Skills</strong></li>
+            <li>Click <strong>Upload Skill</strong></li>
+            <li>Drag and drop the ZIP file — done</li>
+          </ol>
+          <em class="tag">Claude did everything within its reach. The human does what only the human can do.</em>
+        </div>
+      </div>
+
+      <!-- Final note -->
+      <div class="final-reveal-card">
+        <h3>This is what I actually did.</h3>
+        <p>The conversation you just walked through is a real one. Every step, every prompt, every response happened exactly as described.</p>
+      </div>
+
+    </div>
+  </div>
+</section>
+
+<!-- ══════════ PARTICIPANT TIME ══════════ -->
+<section class="bg-warm">
+  <div class="container" style="text-align:center;">
+    <span class="section-label">Your Turn</span>
+    <h2 class="section-title">Now you try it.</h2>
+
+    <p style="color:var(--muted-ink); max-width:680px; margin:0 auto 3rem; font-size:1.1rem; line-height:1.75; font-style:italic;">
+      Using the same process just demonstrated — open Claude and begin working toward a skill that would genuinely serve your own work. You have everything you need.
+    </p>
+
+    <div class="grid-3" style="max-width:800px; margin:0 auto;">
+      <div class="card" style="text-align:center;">
+        <div style="font-size:1.8rem;">1.</div>
+        <p style="margin:0; font-size:0.98rem;">Ask Claude what it knows about your work</p>
+      </div>
+      <div class="card" style="text-align:center;">
+        <div style="font-size:1.8rem;">2.</div>
+        <p style="margin:0; font-size:0.98rem;">Identify one high-value, low-complexity skill candidate</p>
+      </div>
+      <div class="card" style="text-align:center;">
+        <div style="font-size:1.8rem;">3.</div>
+        <p style="margin:0; font-size:0.98rem;">Begin building — and audit before you install</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ══════════ SECTION 3 — The Reveal ══════════ -->
+<section class="bg-navy">
+  <div class="container" style="text-align:center;">
+    <span class="section-label">The Reveal</span>
+    <h2 class="section-title">Ryan's not special.</h2>
+
+    <div class="reveal-stack">
+      <p class="line-a"><em>No coding background. No formal AI training. No technical expertise.</em></p>
+      <p class="line-b">The capabilities demonstrated across this series were built the same way I've been teaching you.</p>
+      <p class="line-c">Curiosity. Experimentation. Attention to the small moments.</p>
+    </div>
+
+    <div class="closer">
+      <p style="font-family:'DM Serif Display',serif; font-style:italic; font-size:clamp(1.8rem,3.5vw,2.8rem); color:var(--white); line-height:1.3; max-width:820px; margin:0 auto 1.5rem;">The ceiling is not where I am. It's wherever your curiosity takes you.</p>
+    </div>
+  </div>
+</section>
+
+<!-- ══════════ SECTION 11 — The Close ══════════ -->
+<section class="bg-navy">
+  <div class="container">
+    <span class="section-label">The Close</span>
+    <h2 class="section-title" style="text-align:center; font-size:clamp(2.8rem,6vw,4.5rem);">The world is your oyster.</h2>
+
+    <div class="close-stack" style="margin-top:4rem;">
+      <p class="l1"><em>The technology will keep evolving.</em></p>
+      <p class="l2">Specific tools will become obsolete.</p>
+      <p class="l3">The quality of thinking you bring to the conversation will not.</p>
+    </div>
+
+    <div class="challenge-card">
+      <div class="label">Your ongoing challenge</div>
+      <h3>Keep paying attention to the small moments.</h3>
+      <p>Every conversation you have with these tools contains micro-decisions — pauses, redirects, checks — that either sharpen your thinking or quietly hand it over. The people who grow the most aren't the ones who use AI the most. They're the ones who stay curious, stay in the driver's seat, and keep noticing when a better move is available.</p>
+    </div>
+  </div>
+</section>
+
+<!-- ══════════ CLOSING VIGNETTE — The Audit ══════════ -->
+<section class="bg-navy">
+  <div class="container">
+    <span class="section-label">One Last Question</span>
+    <h2 class="section-title" style="text-align:center;">Now step back into your own shoes.</h2>
+
+    <div class="vignette" style="margin-top:2.5rem; background:rgba(255,255,255,0.06); border-left-color:var(--terracotta); border-radius:1.5rem; padding:2.5rem 2.75rem; color:var(--white);">
+      <div class="scenario-label">Scenario</div>
+      <div class="scenario" style="color:var(--muted-white);">
+        <p>You've just completed a four-session professional learning series on using AI well at work. You've started using these tools in new ways you wouldn't have imagined before you started. You feel like you've come a long way.</p>
+        <p>But you want to know: are there gaps? Are there lessons from the sessions that you've heard but haven't really applied? Are there patterns in how you use AI that you're not even aware of?</p>
+      </div>
+
+      <p class="prompt-q" style="color:var(--white);">How do you find out how well you're actually applying what you've learned?</p>
+      <p class="prompt-why" style="color:var(--muted-white);">Think about what information you have access to, and how you'd use it.</p>
+
+      <button class="reveal-btn">↓ The Move</button>
+
+      <div class="reveal" style="display:none; background:rgba(255,255,255,0.06); border-radius:1rem; padding:2rem 2.25rem; margin-top:1rem;">
+        <h3 style="color:var(--terracotta);">The Learning Audit</h3>
+        <p style="color:var(--muted-white);">You have something most people don't realise is available to them: the transcripts from all four sessions, and Claude's memory of your conversation history. Put them together.</p>
+        <p style="text-align:center; margin:1.5rem 0;">
+          <a href="QAMH_AI_Training_Reference_Guide.md" download style="display:inline-flex; align-items:center; gap:0.5rem; background:var(--terracotta); color:var(--white); font-family:'Inter',sans-serif; font-size:0.88rem; font-weight:600; padding:0.75rem 1.5rem; border-radius:999px; text-decoration:none; letter-spacing:0.05em; transition:opacity 0.15s;">
+            <span>📄</span> Download: AI Training Reference Guide
+          </a>
+        </p>
+        <blockquote style="background:rgba(255,255,255,0.06); border-left:3px solid var(--terracotta); color:var(--white);">
+          "Here is a reference guide from the AI training series I've just completed. It contains all of the specific strategies and moves that were taught across the four sessions — each one named, described, and explained. I'd like you to read this carefully. Once you've read it, I want you to search your memory of our conversations and do the following: for each strategy named in this document, tell me whether you've seen me apply it in practice. If yes, how consistently and how well? If not, can you point to a specific moment in our conversations where that move would have helped, but wasn't used? I want an honest picture — not a summary of the training, but a map of the gap between what I now know and what I'm actually doing when I work with you. Where are my strengths? Where am I leaving capability on the table?"
+        </blockquote>
+        <p style="color:var(--muted-white);">This is the Memory Check turned into a growth tool. The same move that started this session ends it — applied now to your own learning.</p>
+        <em class="tag" style="color:var(--terracotta);">The process you learned today doesn't just help you work better. It helps you learn better.</em>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ══════════ SECTION 12 — Reflection ══════════ -->
+<section class="bg-warm">
+  <div class="container">
+    <p style="font-family:'DM Serif Display',serif; font-style:italic; font-size:clamp(2rem,4.5vw,3.5rem); line-height:1.3; text-align:center; color:var(--navy); margin:0 auto; max-width:820px;">"Curiosity fuels innovation."</p>
+    <div class="end-credit" style="margin-top:3rem;">
+      <div class="creditline">TaiLORED IDEAS · Dr Ryan Jesson · Session 4 of 4</div>
+    </div>
+  </div>
+</section>
+
+<script>
+  function toggleReveal(btn) {
+    const reveal = btn.nextElementSibling;
+    const hidden = reveal.style.display === 'none';
+    reveal.style.display = hidden ? 'block' : 'none';
+    btn.textContent = hidden ? '↑ Hide' : '↓ The Move';
+  }
+  document.querySelectorAll('.reveal-btn').forEach(btn => {
+    btn.addEventListener('click', () => toggleReveal(btn));
+  });
+</script>
+</body>
+</html>
