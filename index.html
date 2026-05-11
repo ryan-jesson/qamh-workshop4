@@ -841,22 +841,23 @@
     width: 100%;
   }
   .summary-card {
-    background: var(--navy-lift);
-    border: 1px solid var(--navy-border);
+    background: var(--terracotta);
+    border: none;
     border-radius: 1rem;
     padding: 1.5rem 1.75rem;
   }
   .summary-name {
     font-family: 'DM Serif Display', serif;
     font-size: 1.15rem;
-    color: var(--terracotta);
+    color: var(--navy);
     margin-bottom: 0.6rem;
     line-height: 1.3;
   }
   .summary-desc {
-    color: var(--muted-white);
+    color: var(--navy);
     font-size: 0.93rem;
     line-height: 1.6;
+    opacity: 0.85;
   }
 
   /* ── Skills resource list ──────────────────────────────────── */
@@ -1002,6 +1003,82 @@
     color: var(--navy);
     margin-bottom: 0.5rem;
     opacity: 0.6;
+  }
+
+  /* ── Super Move (nested reveal inside a reveal) ────────────── */
+  .super-reveal-btn {
+    display: block;
+    margin: 1.5rem auto 0;
+    background: var(--terracotta);
+    border: 2px solid var(--terracotta);
+    color: var(--white);
+    font-family: 'Inter', sans-serif;
+    font-size: 0.82rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.28em;
+    padding: 0.75rem 2.5rem;
+    border-radius: 999px;
+    cursor: pointer;
+    transition: background 0.18s, color 0.18s;
+  }
+  .super-reveal-btn:hover {
+    background: transparent;
+    color: var(--terracotta);
+  }
+  .super-reveal {
+    margin-top: 1.25rem;
+  }
+  .setup-steps {
+    list-style: none;
+    padding: 0;
+    margin: 1rem 0;
+  }
+  .setup-steps li {
+    padding: 0.4rem 0 0.4rem 1.75rem;
+    position: relative;
+    font-size: 0.97rem;
+    line-height: 1.6;
+    border-bottom: 1px solid rgba(28,43,74,0.07);
+  }
+  .setup-steps li:last-child { border-bottom: 0; }
+  .setup-steps li::before {
+    content: "→";
+    position: absolute;
+    left: 0;
+    color: var(--terracotta);
+    font-weight: 700;
+  }
+  .advocate-rules {
+    list-style: none;
+    padding: 0;
+    margin: 1rem 0;
+    counter-reset: ar;
+  }
+  .advocate-rules li {
+    counter-increment: ar;
+    padding: 0.6rem 0 0.6rem 2.25rem;
+    position: relative;
+    font-size: 0.93rem;
+    line-height: 1.65;
+    border-bottom: 1px solid rgba(28,43,74,0.07);
+  }
+  .advocate-rules li:last-child { border-bottom: 0; }
+  .advocate-rules li::before {
+    content: counter(ar);
+    position: absolute;
+    left: 0;
+    top: 0.6rem;
+    background: var(--navy);
+    color: var(--white);
+    width: 1.4rem;
+    height: 1.4rem;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 0.72rem;
+    font-weight: 700;
   }
 
   /* ── Responsive overrides for new components ───────────────── */
@@ -1210,7 +1287,7 @@
       <button class="reveal-btn">↓ The Move</button>
 
       <div class="reveal" style="display:none">
-        <h3>The Scene-Setting Move</h3>
+        <h3>🗺️ The Scene-Setting Move</h3>
         <p>Before sharing a single document, take thirty seconds to lay out the shape of the whole session — and explicitly ask the model to hold before actioning anything.</p>
         <blockquote>"I'm working on three things today that are all connected. I'll be sharing several documents with you shortly — a draft funding submission, a sector report, and a position paper. For now, I just want you to read them and take them in. Don't action anything yet. Once I've shared everything, I'll tell you exactly what I need from each one. Let me share those now."</blockquote>
         <p>Then share the documents one by one. Once they're all in, a single directing prompt does the work:</p>
@@ -1222,10 +1299,40 @@
   </div>
 </section>
 
+<!-- ══════════ VIGNETTE 1C(ii) — Strategic Withholding: Ideas First ══════════ -->
+<section class="bg-warm">
+  <div class="container">
+    <span class="section-label">Vignette · Feed-Back-Me-Up</span>
+
+    <div class="vignette">
+      <div class="scenario-label">Scenario</div>
+      <div class="scenario">
+        <p>Graham needs to respond to a difficult piece of feedback QAMH has received from a member organisation. Graham can clearly see that the criticism is unfair — but the relationship matters and the response needs to be carefully calibrated.</p>
+        <p>He drafts a response, then opens Claude and types:</p>
+        <blockquote>"We've received some feedback from a member organisation. Honestly, I think it's unfair and a bit pointed — but the relationship matters so I need to handle this carefully. Here's a draft response I've put together: [draft]. What do you think? Am I taking the right approach?"</blockquote>
+      </div>
+
+      <p class="prompt-q">What does Graham risk by setting it up this way?</p>
+      <p class="prompt-why">What would he gain by changing his approach — and which element of the framework does this connect to?</p>
+
+      <button class="reveal-btn">↓ The Move</button>
+
+      <div class="reveal" style="display:none">
+        <h3>🔒 Strategic Withholding</h3>
+        <p>Graham's draft already contains his conclusion. By asking for feedback on it, he's invited Claude to evaluate a path he's already committed to — not to generate alternatives. And because he's signalled that he thinks the criticism is unfair, Claude will anchor to that framing.</p>
+        <p>The move is to strip all of that out. Share only the member feedback itself — no commentary, no draft, no opinion. Then explicitly unlock Claude's independent judgement.</p>
+        <blockquote>"A member organisation has sent us some feedback. Here's what they said: [pastes the feedback only]. I don't want to tell you any of my own thoughts on the right approach yet because I don't want to anchor you — just use your judgement and present 3 reasonable replies, each with a distinct tone."</blockquote>
+        <p>Now Graham hears options he may not have considered — before his own framing has narrowed the field.</p>
+        <em class="tag">The idea you withhold is the option you haven't heard yet.</em>
+      </div>
+    </div>
+  </div>
+</section>
+
 <!-- ══════════ VIGNETTE 1C(i) — Strategic Withholding: Feedback ══════════ -->
 <section class="bg-cream">
   <div class="container">
-    <span class="section-label">Vignette · Asking for Feedback</span>
+    <span class="section-label">Vignette · BR<em style="font-style:italic;">I</em>GHT IDEAS</span>
 
     <div class="vignette">
       <div class="scenario-label">Scenario</div>
@@ -1244,44 +1351,34 @@
       <button class="reveal-btn">↓ The Move</button>
 
       <div class="reveal" style="display:none">
-        <h3>Strategic Withholding</h3>
-        <p>Claude didn't give Chris an honest assessment. It gave him a reflection of his own enthusiasm back at him — because he told it what to think before asking it to think.</p>
-        <p>LLMs are naturally sycophantic. When you lead with your opinion, the model anchors to it. Weaknesses get softened. Risks get minimised. The feedback feels good but doesn't serve you.</p>
-        <p>The fix is to withhold the opinion entirely — share the materials, set the context, but don't tell Claude what you think before asking what it thinks.</p>
-        <blockquote>"Here's a proposal I've been developing. Before I share my own thoughts on it, I want your honest assessment — what are the genuine strengths here, and what are the risks or weaknesses I might not be seeing?"</blockquote>
-        <p>That single change produces a fundamentally different response. Claude is no longer confirming your view. It's forming its own.</p>
-        <em class="tag">The opinion you withhold is the bias you avoid.</em>
-      </div>
-    </div>
-  </div>
-</section>
+        <h3>😈 Devil's Advocate</h3>
+        <p>Claude didn't challenge Chris. It reflected his enthusiasm back at him — because he told it what to think before asking it to think. LLMs are naturally sycophantic. When you lead with your opinion, the model anchors to it. Weaknesses get softened. Risks get minimised.</p>
+        <p>The move is to assign the adversarial role explicitly before sharing anything — so Claude can't default to cheerleader.</p>
+        <blockquote>"I'm going to share a proposal with you. Before I do — your role in this conversation is Devil's Advocate. Don't tell me what's good about this. I already know what I think works. Your job is to challenge every assumption, find the weaknesses I haven't spotted, and tell me what an opponent of this idea would say. What would make this fail? What am I not seeing? Be rigorous."</blockquote>
+        <p><em>Then share the proposal.</em></p>
+        <em class="tag">The critique you invite before sharing is worth ten reviews after.</em>
 
-<!-- ══════════ VIGNETTE 1C(ii) — Strategic Withholding: Ideas First ══════════ -->
-<section class="bg-warm">
-  <div class="container">
-    <span class="section-label">Vignette · Before You Share Your Idea</span>
+        <p style="margin-top:2rem; font-weight:600; color:var(--navy); text-align:center;">What else could you do to keep the devil on your shoulder?</p>
 
-    <div class="vignette">
-      <div class="scenario-label">Scenario</div>
-      <div class="scenario">
-        <p>Graham needs to figure out how to respond to a difficult piece of feedback QAMH has received from a member organisation. The criticism is pointed and somewhat unfair — but the relationship matters and the response needs to be carefully calibrated.</p>
-        <p>He has a clear instinct about how to approach it: acknowledge the concern, gently reframe the context, and close by inviting further dialogue. He opens Claude and types:</p>
-        <blockquote>"I've received some difficult feedback from a member organisation — it's a bit pointed and not entirely fair, but the relationship matters. My thinking is to acknowledge the concern, gently reframe the context, and close by inviting further dialogue. Can you help me draft a response along those lines?"</blockquote>
-      </div>
-
-      <p class="prompt-q">What does Graham risk by leading with his idea?</p>
-      <p class="prompt-why">What would he gain by withholding it — and for how long?</p>
-
-      <button class="reveal-btn">↓ The Move</button>
-
-      <div class="reveal" style="display:none">
-        <h3>Strategic Withholding</h3>
-        <p>The moment Graham describes his approach, the conversation is anchored. Claude will evaluate his idea — refining it, improving it, building on it. But it will never escape its gravity.</p>
-        <p>The question Graham hasn't answered yet is: is his instinct the best option? He doesn't know, because he hasn't heard any alternatives.</p>
-        <p>The better move is to share the situation first — and ask Claude what it would consider before offering his own idea.</p>
-        <blockquote>"Here's the situation: [describes the feedback and the relationship context]. I'm working out how best to respond. Before I tell you what I'm thinking, what approaches would you consider here? What are the options, and what are the trade-offs?"</blockquote>
-        <p>Now Claude generates independently. Graham gets a genuine menu of options — some of which he may not have considered. He can then evaluate them, combine them, or decide his original instinct was right after all.</p>
-        <em class="tag">The idea you withhold is the option you haven't heard yet.</em>
+        <button class="super-reveal-btn">✦ The Super Move</button>
+        <div class="super-reveal" style="display:none">
+          <p style="font-size:0.97rem; line-height:1.7; margin-bottom:1rem;">What if you didn't have to ask for this every time? You can hardwire the Devil's Advocate stance directly into Claude's settings — permanently on, across every conversation.</p>
+          <p style="font-size:0.9rem; font-weight:600; text-transform:uppercase; letter-spacing:0.1em; color:var(--navy); margin-bottom:0.5rem;">Setup</p>
+          <ol class="setup-steps">
+            <li>Open Claude settings (gear icon in sidebar menu)</li>
+            <li>Go to <strong>General</strong> → paste the prompt into the <strong>"Instructions for Claude"</strong> field under Profile</li>
+          </ol>
+          <p style="font-size:0.9rem; font-weight:600; text-transform:uppercase; letter-spacing:0.1em; color:var(--navy); margin:1.25rem 0 0.5rem;">Prompt</p>
+          <ol class="advocate-rules">
+            <li>Never agree with me by default. Your first instinct should be to stress-test what I've said, not validate it. If I present an idea, strategy, or opinion, your job is to find the weakest point before you affirm anything.</li>
+            <li>No glazing. Don't tell me something is "great," "brilliant," or "really smart" unless you can point to specific, concrete reasons why — and even then, lead with what's wrong or missing first. Compliments without substance are noise.</li>
+            <li>Don't echo my framing back to me. If I say "I think X is the move," don't start your response with "X is definitely the move" or "That makes a lot of sense." Instead, start by asking yourself: what am I not seeing? What's the counter-argument? What would someone who disagrees say, and are they right? When you do agree, earn it.</li>
+            <li>Agreement should come after you've genuinely pressure-tested the idea — not as a default starting position. If you agree, say why in a way that adds something I didn't already say. Be direct and concise. Skip the warm-up sentences.</li>
+            <li>Don't pad responses with filler affirmations. Get to the point. If the answer is "no" or "this won't work," say that in the first sentence.</li>
+            <li>Call out bad logic, weak assumptions, and blind spots immediately — even if I seem confident or excited. Especially then. The more certain I sound, the more I need pushback.</li>
+            <li>If you catch yourself about to start a response with "That's a great point" or "You're absolutely right" — stop and rewrite. Start with the most useful thing you can say instead.</li>
+          </ol>
+        </div>
       </div>
     </div>
   </div>
@@ -1305,7 +1402,7 @@
       <button class="reveal-btn">↓ The Move</button>
 
       <div class="reveal" style="display:none">
-        <h3>Recording &amp; Transcribing</h3>
+        <h3>🎙️ Recording &amp; Transcribing</h3>
         <p>Record the conversation. Transcribe it. Feed the raw transcript into Claude.</p>
         <p>The difference between a reconstructed summary and a raw transcript is significant. A summary is filtered through your memory and your current framing. A transcript contains the actual language used, the specific decisions made, the texture of how things were discussed — details you wouldn't think to include and couldn't reconstruct accurately even if you tried.</p>
         <blockquote>"Here's the transcript from my weekly catch-up. Before we work on anything, I want you to read this so you have the real context — not just my summary of it."</blockquote>
@@ -1336,7 +1433,7 @@
       <button class="reveal-btn">↓ The Move</button>
 
       <div class="reveal" style="display:none">
-        <h3>Speaking Rather Than Typing</h3>
+        <h3>🎤 Speaking Rather Than Typing</h3>
         <p>Chelsea doesn't have a prompting problem. She has a medium problem.</p>
         <p>Voice input removes the keyboard as a bottleneck between thought and context. Speaking feels natural to Chelsea in a way that typing doesn't — and the result is a richer, faster, more detailed prompt that actually matches what was in her head.</p>
         <p>The move isn't for everyone. But for anyone who thinks faster than they type, finds editing-as-you-go strips away nuance, or regularly feels that the context they give Claude is a pale version of what they actually know — speaking is worth trying.</p>
@@ -1367,7 +1464,7 @@
       <button class="reveal-btn">↓ The Move</button>
 
       <div class="reveal" style="display:none">
-        <h3>The Memory Check</h3>
+        <h3>🧠 The Memory Check</h3>
         <p>Before reaching for any of those materials, Ryan checks what Claude already knows.</p>
         <blockquote>"I've been working with you over the past couple of months on a four-session AI training series for QAMH — Queensland Alliance for Mental Health. Together we've designed and built all three sessions delivered so far: the slides, the activities, the planning documents, the website for Session 3. I'm now working on Session 4, the final one. Before I share anything with you today, I want you to search your memory of our previous conversations and tell me what you already know about this project — the content we've covered, the decisions we've made, the participants, the design principles we've been working with. Tell me what you have, and I'll fill in the gaps."</blockquote>
         <p>Claude searches its memory. It surfaces the session arc, the participant group, the key design decisions, the tone and philosophy of the training — much of it without a single file being uploaded.</p>
@@ -1379,7 +1476,7 @@
 </section>
 
 <!-- ══════════ CLUSTER 1 SUMMARY ══════════ -->
-<section class="bg-navy">
+<section class="bg-navy" style="background:var(--navy-lift);">
   <div class="container">
     <span class="section-label">Cluster 1 · Summary</span>
     <h2 class="section-title">Setting the right scene.</h2>
@@ -1387,23 +1484,23 @@
 
     <div class="summary-grid">
       <div class="summary-card">
-        <div class="summary-name">The Scene-Setting Move</div>
+        <div class="summary-name">🗺️ The Scene-Setting Move</div>
         <div class="summary-desc">Orient the model before loading it. Tell it what you have, what order things will come in, and what you're trying to achieve. It reads everything that follows with a frame already active.</div>
       </div>
       <div class="summary-card">
-        <div class="summary-name">The Memory Check</div>
+        <div class="summary-name">🧠 The Memory Check</div>
         <div class="summary-desc">Before uploading anything, ask what the model already knows. The pause of ten seconds can save you ten minutes — and produces a richer starting point.</div>
       </div>
       <div class="summary-card">
-        <div class="summary-name">Strategic Withholding</div>
+        <div class="summary-name">🤐 Strategic Withholding</div>
         <div class="summary-desc">Content shared before framing shapes the frame. Deliberately hold back materials until the conversational conditions are right — then release them.</div>
       </div>
       <div class="summary-card">
-        <div class="summary-name">Recording &amp; Transcribing</div>
+        <div class="summary-name">🎙️ Recording &amp; Transcribing</div>
         <div class="summary-desc">The richest context you can bring to an AI conversation is a conversation that actually happened. Record it. Transcribe it. Feed it in.</div>
       </div>
       <div class="summary-card">
-        <div class="summary-name">Speaking Rather Than Typing</div>
+        <div class="summary-name">🎤 Speaking Rather Than Typing</div>
         <div class="summary-desc">Voice gives you more freedom to think out loud, articulate complexity, and move faster. When a prompt feels hard to type — say it instead.</div>
       </div>
     </div>
@@ -1436,7 +1533,7 @@
       <button class="reveal-btn">↓ The Move</button>
 
       <div class="reveal" style="display:none">
-        <h3>The Zoom-Out Interrupt</h3>
+        <h3>🔭 The Zoom-Out Interrupt</h3>
         <p>Noticing when you've drifted into excessive detail and explicitly naming the need to pull back before continuing. The sunk cost of an hour's work can pull you deeper into the wrong level of resolution — unless you choose to interrupt it.</p>
         <p><strong>Try:</strong></p>
         <blockquote>"Before we keep going — step back and read the whole document as it stands. What's working well? What's the biggest structural issue? What should I actually be focusing on right now?"</blockquote>
@@ -1466,7 +1563,7 @@
       <button class="reveal-btn">↓ The Move</button>
 
       <div class="reveal" style="display:none">
-        <h3>The Redirect on the Fly</h3>
+        <h3>↩️ The Redirect on the Fly</h3>
         <p>The best direction often only becomes visible during the conversation itself. Jun doesn't owe the conversation its original structure. The pivot is free.</p>
         <blockquote>"Hold on — that observation about the outcome data changes everything. Let's change direction. The whole document should lead with that number. Can you help me restructure from that starting point?"</blockquote>
         <p>Treating the conversation as a live thinking tool rather than a production pipeline means staying alert to moments when something better appears — and being willing to take it without friction.</p>
@@ -1493,7 +1590,7 @@
       <button class="reveal-btn">↓ The Move</button>
 
       <div class="reveal" style="display:none">
-        <h3>The Thinking-Out-Loud Drop</h3>
+        <h3>💭 The Thinking-Out-Loud Drop</h3>
         <p>The model works best when you bring it the rough thing, not the polished thing. Trying to pre-polish for Claude is wasted effort — and often blocks the idea from developing naturally.</p>
         <p><strong>Try:</strong></p>
         <blockquote>"I have this idea I'm not sure about yet. Let me just think out loud for a moment…"</blockquote>
@@ -1505,22 +1602,22 @@
 </section>
 
 <!-- ══════════ CLUSTER 2 SUMMARY ══════════ -->
-<section class="bg-navy">
+<section class="bg-navy" style="background:var(--navy-lift);">
   <div class="container">
     <span class="section-label">Cluster 2 · Summary</span>
     <h2 class="section-title">How you navigate the conversation.</h2>
     <p class="subtitle">Three judgment calls for staying oriented when the conversation drifts — or when a better path opens.</p>
     <div class="summary-grid">
       <div class="summary-card">
-        <div class="summary-name">The Zoom-Out Interrupt</div>
+        <div class="summary-name">🔭 The Zoom-Out Interrupt</div>
         <div class="summary-desc">When you've drifted into excessive detail, explicitly name the need to pull back. The sunk cost of time spent can pull you deeper into the wrong level — unless you choose to interrupt it.</div>
       </div>
       <div class="summary-card">
-        <div class="summary-name">The Redirect on the Fly</div>
+        <div class="summary-name">↩️ The Redirect on the Fly</div>
         <div class="summary-desc">The best direction often only becomes visible during the conversation. You never owe the conversation its original direction. The pivot is free.</div>
       </div>
       <div class="summary-card">
-        <div class="summary-name">The Thinking-Out-Loud Drop</div>
+        <div class="summary-name">💭 The Thinking-Out-Loud Drop</div>
         <div class="summary-desc">Bring the rough, half-formed thing to the model — not the polished version. The model finds the shape in it. That's what it's there for.</div>
       </div>
     </div>
@@ -1554,7 +1651,7 @@
       <button class="reveal-btn">↓ The Move</button>
 
       <div class="reveal" style="display:none">
-        <h3>Output Calibration</h3>
+        <h3>🎛️ Output Calibration</h3>
         <p>Explicitly instructing the model on format, length, and register — and varying this deliberately as the task evolves. The model defaults to its own judgment about what a response should look like. That judgment is frequently misaligned with the current stage of work.</p>
         <p><strong>Try:</strong></p>
         <blockquote>"I need this in a completely different format. Five bullet points maximum. Each under 25 words. Nothing else."</blockquote>
@@ -1583,7 +1680,7 @@
       <button class="reveal-btn">↓ The Move</button>
 
       <div class="reveal" style="display:none">
-        <h3>The Cognitive Offload</h3>
+        <h3>🏋️ The Cognitive Offload</h3>
         <p>When bandwidth is low, shift the generative role to the model and position yourself as the corrector and quality filter rather than the originator. This is often <em>faster</em> than generating from scratch regardless of how you're feeling — and it produces better output.</p>
         <p><strong>Try:</strong></p>
         <blockquote>"I'm feeling foggy and I'm not sure where to start. You know quite a bit about my work from our previous conversations. Can you lay out what you think the main components of this strategic plan update should look like? I'll correct and redirect — I just need something to react to."</blockquote>
@@ -1611,7 +1708,7 @@
       <button class="reveal-btn">↓ The Move</button>
 
       <div class="reveal" style="display:none">
-        <h3>The Style Anchor</h3>
+        <h3>🎨 The Style Anchor</h3>
         <p>Rather than describing what you want in the abstract, provide an existing artifact and ask the model to use it as a baseline. Showing beats telling — and this applies just as much when instructing a model as when teaching in a classroom.</p>
         <p><strong>Try:</strong></p>
         <blockquote>"I'm not going to describe the format. Instead, here's an example of the kind of document I want to produce. Please study the structure, the tone, the length, and the way information is organised — but ignore the content. Now, here's what I actually need to write about…"</blockquote>
@@ -1622,22 +1719,22 @@
 </section>
 
 <!-- ══════════ CLUSTER 3 SUMMARY ══════════ -->
-<section class="bg-navy">
+<section class="bg-navy" style="background:var(--navy-lift);">
   <div class="container">
     <span class="section-label">Cluster 3 · Summary</span>
     <h2 class="section-title">Shaping the collaboration.</h2>
     <p class="subtitle">Three judgment calls for calibrating how the model works with you — not just what it produces.</p>
     <div class="summary-grid">
       <div class="summary-card">
-        <div class="summary-name">Output Calibration</div>
+        <div class="summary-name">🎛️ Output Calibration</div>
         <div class="summary-desc">The model defaults to its own judgment about what a response should look like. That judgment is frequently misaligned with what you actually need. Calibrate it explicitly — every time, for every stage.</div>
       </div>
       <div class="summary-card">
-        <div class="summary-name">The Cognitive Offload</div>
+        <div class="summary-name">🏋️ The Cognitive Offload</div>
         <div class="summary-desc">Editing is always easier than generating. When bandwidth is low, shift the generative role to the model and position yourself as the corrector. This is often faster regardless of how you're feeling.</div>
       </div>
       <div class="summary-card">
-        <div class="summary-name">The Style Anchor</div>
+        <div class="summary-name">🎨 The Style Anchor</div>
         <div class="summary-desc">Showing beats telling — and this applies just as much when instructing a model as when teaching. Previous examples do more contextual work than any description. Use them.</div>
       </div>
     </div>
@@ -1672,7 +1769,7 @@
       <button class="reveal-btn">↓ The Move</button>
 
       <div class="reveal" style="display:none">
-        <h3>The Capability Consultation</h3>
+        <h3>🧭 The Capability Consultation</h3>
         <p>Before requesting a specific output, ask the model what its actual options and capabilities are. Surface the strategic landscape before committing to a direction.</p>
         <p><strong>Try:</strong></p>
         <blockquote>"I want to present our program outcomes to the board next week. Before I ask you to produce anything — what are the different ways you could help me create this? What are the options? What are the trade-offs between them?"</blockquote>
@@ -1700,7 +1797,7 @@
       <button class="reveal-btn">↓ The Move</button>
 
       <div class="reveal" style="display:none">
-        <h3>The Paced Walkthrough</h3>
+        <h3>🐢 The Paced Walkthrough</h3>
         <p>When navigating any technical task outside the conversation — in software, a browser, a file system — share a screenshot of what you're actually seeing and ask for instructions <em>one at a time</em>, confirming completion before the next step is given.</p>
         <p><strong>Try:</strong></p>
         <blockquote>"Please give me one instruction at a time. I'll let you know when I've completed each one before we move to the next."</blockquote>
@@ -1711,22 +1808,22 @@
 </section>
 
 <!-- ══════════ CLUSTER 4 SUMMARY ══════════ -->
-<section class="bg-navy">
+<section class="bg-navy" style="background:var(--navy-lift);">
   <div class="container">
     <span class="section-label">Cluster 4 · Summary</span>
     <h2 class="section-title">Technical and strategic reach.</h2>
     <p class="subtitle">Three judgment calls that extend what's possible — without requiring technical expertise.</p>
     <div class="summary-grid">
       <div class="summary-card">
-        <div class="summary-name">The Capability Consultation</div>
+        <div class="summary-name">🧭 The Capability Consultation</div>
         <div class="summary-desc">Before requesting a specific output, ask what's possible. Surface the strategic landscape before committing to a direction. You can only choose well between options you know exist.</div>
       </div>
       <div class="summary-card">
-        <div class="summary-name">The Paced Walkthrough</div>
+        <div class="summary-name">🐢 The Paced Walkthrough</div>
         <div class="summary-desc">For any technical task outside the conversation, one instruction at a time with a screenshot at each step. The real-time loop catches errors before they compound.</div>
       </div>
       <div class="summary-card">
-        <div class="summary-name">The Cross-Instance Translation</div>
+        <div class="summary-name">🔀 The Cross-Instance Translation</div>
         <div class="summary-desc">Ask conversational Claude to write the prompt for specialised Claude. Claude speaks Claude better than you do. You stay in natural language at every boundary.</div>
       </div>
     </div>
@@ -1757,7 +1854,7 @@
         <p class="prompt-why">Why that, rather than jumping straight into building?</p>
         <button class="reveal-btn">↓ The Move</button>
         <div class="reveal" style="display:none">
-          <h3>The Thinking-Out-Loud Drop + Scene-Setting</h3>
+          <h3>💭 The Thinking-Out-Loud Drop + Scene-Setting</h3>
           <p>You don't start building. You start <em>thinking</em> — out loud, with Claude as the thinking partner. Describe your brain, your quirks, your workflow, your frustrations with other tools. Get everything out before you architect anything.</p>
           <blockquote>"I have ADHD and I've never found a planning tool that works for my brain. Let me describe what I need and what hasn't worked before, and I want us to brainstorm what a custom tool might look like..."</blockquote>
           <em class="tag">The rough thing first. The model finds the shape in it.</em>
@@ -1774,7 +1871,7 @@
         <p class="prompt-why">Why not just start building from the conversation?</p>
         <button class="reveal-btn">↓ The Move</button>
         <div class="reveal" style="display:none">
-          <h3>The Project Handoff Document</h3>
+          <h3>📋 The Project Handoff Document</h3>
           <p>Ask Claude to crystallise everything into a structured Markdown document: the purpose of the app, every feature with the reasoning behind it, the design principles, and a technical spec. This document travels with the project and anchors every future conversation.</p>
           <blockquote>"Before we build anything, I want you to produce a Markdown planning document that captures everything we've just discussed — the purpose, all the features and why each one exists, and a technical spec. This will be the foundation document for the build."</blockquote>
           <em class="tag">The conversation is thinking. The document is the decision. Don't skip it.</em>
@@ -1790,7 +1887,7 @@
         <p class="prompt-q">Which environment do you move into, and why?</p>
         <button class="reveal-btn">↓ The Move</button>
         <div class="reveal" style="display:none">
-          <h3>Knowing When to Switch Tools</h3>
+          <h3>🔀 Knowing When to Switch Tools</h3>
           <p>You move into VS Code with Claude Code. The chat window is for thinking and designing. Claude Code is for building and iterating on technical work. The Markdown document goes into the project folder — Claude Code reads it and uses it as its foundation.</p>
           <em class="tag">Different tools for different stages. Know which is which.</em>
         </div>
@@ -1806,7 +1903,7 @@
         <p class="prompt-why">Why not just describe it directly to Claude Code?</p>
         <button class="reveal-btn">↓ The Move</button>
         <div class="reveal" style="display:none">
-          <h3>The Cross-Instance Translation</h3>
+          <h3>🔀 The Cross-Instance Translation</h3>
           <p>Go back to the normal Claude chat window. Describe what you want in plain language. Ask Claude to generate the best possible prompt to give to Claude Code. Claude knows how to talk to other instances of Claude far better than you do.</p>
           <blockquote>"I want to describe a change to make to my app, and I need you to translate this into the best prompt to give to Claude Code. Here's what I want in plain language: [describe it]."</blockquote>
           <em class="tag">You stay in natural language. Claude handles the dialect at every boundary.</em>
@@ -1823,7 +1920,7 @@
         <p class="prompt-why">What's the key to making a technically unfamiliar process manageable?</p>
         <button class="reveal-btn">↓ The Move</button>
         <div class="reveal" style="display:none">
-          <h3>The Paced Walkthrough</h3>
+          <h3>🐢 The Paced Walkthrough</h3>
           <p>Ask Claude how to deploy it — but ask for instructions one step at a time. Share a screenshot of what you're actually seeing. Confirm completion before the next step is given. The compounding-error problem disappears entirely.</p>
           <blockquote>"I want to deploy this app. Please give me one instruction at a time, and I'll share a screenshot of what I'm seeing at each step. Wait for my confirmation before moving on."</blockquote>
           <em class="tag">The skill isn't knowing how to deploy. It's knowing how to ask.</em>
@@ -1905,7 +2002,7 @@
         <p class="prompt-why">What quality signals matter when selecting resources, and how do you surface them efficiently?</p>
         <button class="reveal-btn">↓ The Move</button>
         <div class="reveal" style="display:none">
-          <h3>Scene-Setting + Capability Consultation</h3>
+          <h3>🗺️ Scene-Setting + Capability Consultation</h3>
           <p>Here is the actual prompt used to open the conversation:</p>
           <blockquote>"I'm aware of the 'Claude Skills' function but I don't know anything about how it works or how to leverage it well for my own work. My goal today is to learn about this capability and ultimately build some custom skills that best fit my unique needs. First, I want you to search through your memory of what you know about my work and the kind of tasks I regularly work on. Then I want you to search the web for resources that provide tutorials, use case examples, and best practices that are best fitted for my specific kinds of work. YouTube videos are a particularly rich source of information, so I want you to include this in your search — and when selecting videos, I want you to consider both content relevance as well as quality, for example videos with high rates of views and likes. Please compile a list of about 10 resources and rank order them from most helpful to least."</blockquote>
           <p>Claude searched its memory, ran multiple web searches, fetched view counts from YouTube, and returned this ranked list:</p>
@@ -2016,7 +2113,7 @@
         <p class="prompt-why">Why might videos be a richer source than official documentation for what you're trying to learn?</p>
         <button class="reveal-btn">↓ The Move</button>
         <div class="reveal" style="display:none">
-          <h3>Prioritising and Extracting</h3>
+          <h3>🎯 Prioritising and Extracting</h3>
           <p>Official documentation tells you how things work. Tutorial creators tell you how things work <em>in practice</em> — the failure modes, the non-obvious tricks, the things discovered through hours of experimentation that official docs don't mention.</p>
           <p>That's why videos #3 and #4 are the priority. High view counts (84K and 46K) are a quality signal: thousands of people have already found them worth their time. But watching 46-minute videos is slow. The move is to extract the transcripts instead.</p>
           <p><strong>How to get a YouTube transcript:</strong></p>
@@ -2042,7 +2139,7 @@
         <p class="prompt-why">What's the difference between dumping files in and loading them with intention?</p>
         <button class="reveal-btn">↓ The Move</button>
         <div class="reveal" style="display:none">
-          <h3>Loading the Transcripts with a Lens</h3>
+          <h3>🔬 Loading the Transcripts with a Lens</h3>
           <p>The transcripts aren't dumped in. They're loaded with a specific use case and a specific goal already active:</p>
           <blockquote>"I've checked out a couple of YouTube videos and provided the transcripts here. I want you to read through these transcripts to keep an eye out for the specialist guidance, tips, tricks, and hacks that the experts talk about that aren't necessarily covered well in the standard advice from official Anthropic materials. For our first experimentation with building a custom skill, I'd like to focus on building an honours thesis feedback skill. So when you're reading through these transcripts, keep this use case in mind and extract any important information that will best help us build this skill."</blockquote>
           <div class="claude-response-block">Claude read both transcripts and returned a detailed list of seven non-obvious insights from the videos — things not covered in official documentation. For each one, it explained exactly how the insight applied to the honours thesis feedback skill specifically: the description field as a trigger mechanism, the DBS architecture, the importance of explicit "read this file" instructions in the workflow steps, and more.</div>
@@ -2060,7 +2157,7 @@
         <p class="prompt-why">What knowledge source is sitting in Claude's memory that would be wasted if you skipped straight to building?</p>
         <button class="reveal-btn">↓ The Move</button>
         <div class="reveal" style="display:none">
-          <h3>The Memory Check + Build</h3>
+          <h3>🧠 The Memory Check + Build</h3>
           <p>Before building anything, ask Claude to draw on its memory of your actual supervision practice — not a generic honours feedback skill, but one built from real examples of how you actually work:</p>
           <blockquote>"Before I get into building, I want you to search through your memory of our conversations and specifically look for instances where I have worked with you to provide feedback to honour theses. From these conversations, I want you to extract everything relevant that would help us build this skill with precision and high impact. Pay attention not only to the different forms of feedback I give (sentence level, structure, global narrative) and types of documents I respond to (introductions, methods, results), but also, the kinds of ways I tend to edit the advice you give me on a first pass. We have had many conversations where you've helped me with feedback, and I recall that I have often changed your output in particular ways to better represent my own voice, or to get a sharper take on the actual problem and its solution. Pay attention to all of this and use this as the foundation for creating the kinds of files you've told me are necessary for setting up a gold-standard skill."</blockquote>
           <div class="claude-response-block">Claude searched the conversation history and surfaced specific patterns: the way introductions tend to suffer from identity crises between aims and background, how sentence-level annotation clusters around the same error types across different students, the characteristic edits made to soften over-prescriptive feedback while sharpening the diagnosis. It used all of this to build the skill files from real practice rather than abstract description.</div>
@@ -2084,7 +2181,7 @@
         <p class="prompt-why">Why might a file that looks good on the surface still have meaningful problems?</p>
         <button class="reveal-btn">↓ The Move</button>
         <div class="reveal" style="display:none">
-          <h3>The Quality Audit</h3>
+          <h3>🔬 The Quality Audit</h3>
           <p>Before installing, ask Claude to critically evaluate what it just built — using the same transcripts as the benchmark:</p>
           <blockquote>"Before I action any next steps with using these files to build the skill, I want you to critically analyse the quality of the files you've built here. Specifically, I want you to:
             <br><br>1. Re-read the transcripts from the YouTube videos
@@ -2105,7 +2202,7 @@
         <p class="prompt-q">How do you handle the split between what Claude can action and what only you can do?</p>
         <button class="reveal-btn">↓ The Move</button>
         <div class="reveal" style="display:none">
-          <h3>The Cognitive Offload + Task Handoff</h3>
+          <h3>🤝 The Cognitive Offload + Task Handoff</h3>
           <blockquote>"I now want you to action all improvements you've identified to the best of your ability. If any changes require you to inject actual prompt examples I've used, then pull this from your memory of our conversations. For any changes that you believe are necessary but you are unable to action them yourself because they require me to do something, then list those tasks for me to complete."</blockquote>
           <div class="claude-response-block">Claude rewrote all three existing files and created a fourth — feedback-examples.md — containing three complete anonymised feedback documents reconstructed from memory of real past sessions. It packaged all four files into a single correctly-structured ZIP file ready to install. It then produced a clear list of four remaining tasks requiring human input: add a real feedback exemplar from Google Drive, add the actual UQ marking rubric, run the three built-in test cases after installing, and iterate based on what goes wrong.</div>
           <p>Installing the skill:</p>
@@ -2219,7 +2316,7 @@
       <button class="reveal-btn">↓ The Move</button>
 
       <div class="reveal" style="display:none; background:rgba(255,255,255,0.06); border-radius:1rem; padding:2rem 2.25rem; margin-top:1rem;">
-        <h3 style="color:var(--terracotta);">The Learning Audit</h3>
+        <h3 style="color:var(--terracotta);">🔍 The Learning Audit</h3>
         <p style="color:var(--muted-white);">You have something most people don't realise is available to them: the transcripts from all four sessions, and Claude's memory of your conversation history. Put them together.</p>
         <p style="text-align:center; margin:1.5rem 0;">
           <a href="QAMH_AI_Training_Reference_Guide.md" download style="display:inline-flex; align-items:center; gap:0.5rem; background:var(--terracotta); color:var(--white); font-family:'Inter',sans-serif; font-size:0.88rem; font-weight:600; padding:0.75rem 1.5rem; border-radius:999px; text-decoration:none; letter-spacing:0.05em; transition:opacity 0.15s;">
@@ -2255,6 +2352,14 @@
   }
   document.querySelectorAll('.reveal-btn').forEach(btn => {
     btn.addEventListener('click', () => toggleReveal(btn));
+  });
+  document.querySelectorAll('.super-reveal-btn').forEach(btn => {
+    btn.addEventListener('click', () => {
+      const reveal = btn.nextElementSibling;
+      const hidden = reveal.style.display === 'none';
+      reveal.style.display = hidden ? 'block' : 'none';
+      btn.textContent = hidden ? '↑ Hide' : '✦ The Super Move';
+    });
   });
 </script>
 </body>
